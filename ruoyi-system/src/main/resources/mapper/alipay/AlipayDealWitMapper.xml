@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AlipayDealWitMapper">
+    
+    <resultMap type="AlipayDealWit" id="AlipayDealWitResult">
+        <result property="id"    column="id"    />
+        <result property="orderid"    column="orderId"    />
+        <result property="associatedid"    column="associatedId"    />
+        <result property="orderstatus"    column="orderStatus"    />
+        <result property="dealamount"    column="dealAmount"    />
+        <result property="dealfee"    column="dealFee"    />
+        <result property="actualamount"    column="actualAmount"    />
+        <result property="orderaccount"    column="orderAccount"    />
+        <result property="chanenlid"    column="chanenlId"    />
+        <result property="witinfo"    column="witInfo"    />
+        <result property="externalorderid"    column="externalOrderId"    />
+        <result property="dealdescribe"    column="dealDescribe"    />
+        <result property="notify"    column="notify"    />
+        <result property="back"    column="back"    />
+        <result property="isnotify"    column="isNotify"    />
+        <result property="createtime"    column="createTime"    />
+        <result property="submittime"    column="submitTime"    />
+        <result property="feeid"    column="feeId"    />
+        <result property="status"    column="status"    />
+        <result property="wittype"    column="witType"    />
+        <result property="currency"    column="currency"    />
+        <result property="msg"    column="msg"    />
+    </resultMap>
+
+    <sql id="selectAlipayDealWitVo">
+        select id, orderId, associatedId, orderStatus, dealAmount, dealFee, actualAmount, orderAccount, chanenlId, witInfo, externalOrderId, dealDescribe, notify, back, isNotify, createTime, submitTime, feeId, status, witType, currency, msg from alipay_deal_wit
+    </sql>
+
+    <select id="selectAlipayDealWitList" parameterType="AlipayDealWit" resultMap="AlipayDealWitResult">
+        <include refid="selectAlipayDealWitVo"/>
+        <where>  
+            <if test="orderid != null  and orderid != ''"> and orderId = #{orderid}</if>
+            <if test="associatedid != null  and associatedid != ''"> and associatedId = #{associatedid}</if>
+            <if test="orderstatus != null  and orderstatus != ''"> and orderStatus = #{orderstatus}</if>
+            <if test="dealamount != null "> and dealAmount = #{dealamount}</if>
+            <if test="dealfee != null "> and dealFee = #{dealfee}</if>
+            <if test="actualamount != null "> and actualAmount = #{actualamount}</if>
+            <if test="orderaccount != null  and orderaccount != ''"> and orderAccount = #{orderaccount}</if>
+            <if test="chanenlid != null  and chanenlid != ''"> and chanenlId = #{chanenlid}</if>
+            <if test="witinfo != null  and witinfo != ''"> and witInfo = #{witinfo}</if>
+            <if test="externalorderid != null  and externalorderid != ''"> and externalOrderId = #{externalorderid}</if>
+            <if test="dealdescribe != null  and dealdescribe != ''"> and dealDescribe = #{dealdescribe}</if>
+            <if test="notify != null  and notify != ''"> and notify = #{notify}</if>
+            <if test="back != null  and back != ''"> and back = #{back}</if>
+            <if test="isnotify != null  and isnotify != ''"> and isNotify = #{isnotify}</if>
+            <if test="createtime != null "> and createTime = #{createtime}</if>
+            <if test="submittime != null "> and submitTime = #{submittime}</if>
+            <if test="feeid != null "> and feeId = #{feeid}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="wittype != null  and wittype != ''"> and witType = #{wittype}</if>
+            <if test="currency != null  and currency != ''"> and currency = #{currency}</if>
+            <if test="msg != null  and msg != ''"> and msg = #{msg}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayDealWitById" parameterType="Long" resultMap="AlipayDealWitResult">
+        <include refid="selectAlipayDealWitVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayDealWit" parameterType="AlipayDealWit" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_deal_wit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderid != null  and orderid != ''">orderId,</if>
+            <if test="associatedid != null  and associatedid != ''">associatedId,</if>
+            <if test="orderstatus != null  and orderstatus != ''">orderStatus,</if>
+            <if test="dealamount != null ">dealAmount,</if>
+            <if test="dealfee != null ">dealFee,</if>
+            <if test="actualamount != null ">actualAmount,</if>
+            <if test="orderaccount != null  and orderaccount != ''">orderAccount,</if>
+            <if test="chanenlid != null  and chanenlid != ''">chanenlId,</if>
+            <if test="witinfo != null  and witinfo != ''">witInfo,</if>
+            <if test="externalorderid != null  and externalorderid != ''">externalOrderId,</if>
+            <if test="dealdescribe != null  and dealdescribe != ''">dealDescribe,</if>
+            <if test="notify != null  and notify != ''">notify,</if>
+            <if test="back != null  and back != ''">back,</if>
+            <if test="isnotify != null  and isnotify != ''">isNotify,</if>
+            <if test="createtime != null ">createTime,</if>
+            <if test="submittime != null ">submitTime,</if>
+            <if test="feeid != null ">feeId,</if>
+            <if test="status != null ">status,</if>
+            <if test="wittype != null  and wittype != ''">witType,</if>
+            <if test="currency != null  and currency != ''">currency,</if>
+            <if test="msg != null  and msg != ''">msg,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderid != null  and orderid != ''">#{orderid},</if>
+            <if test="associatedid != null  and associatedid != ''">#{associatedid},</if>
+            <if test="orderstatus != null  and orderstatus != ''">#{orderstatus},</if>
+            <if test="dealamount != null ">#{dealamount},</if>
+            <if test="dealfee != null ">#{dealfee},</if>
+            <if test="actualamount != null ">#{actualamount},</if>
+            <if test="orderaccount != null  and orderaccount != ''">#{orderaccount},</if>
+            <if test="chanenlid != null  and chanenlid != ''">#{chanenlid},</if>
+            <if test="witinfo != null  and witinfo != ''">#{witinfo},</if>
+            <if test="externalorderid != null  and externalorderid != ''">#{externalorderid},</if>
+            <if test="dealdescribe != null  and dealdescribe != ''">#{dealdescribe},</if>
+            <if test="notify != null  and notify != ''">#{notify},</if>
+            <if test="back != null  and back != ''">#{back},</if>
+            <if test="isnotify != null  and isnotify != ''">#{isnotify},</if>
+            <if test="createtime != null ">#{createtime},</if>
+            <if test="submittime != null ">#{submittime},</if>
+            <if test="feeid != null ">#{feeid},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="wittype != null  and wittype != ''">#{wittype},</if>
+            <if test="currency != null  and currency != ''">#{currency},</if>
+            <if test="msg != null  and msg != ''">#{msg},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayDealWit" parameterType="AlipayDealWit">
+        update alipay_deal_wit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderid != null  and orderid != ''">orderId = #{orderid},</if>
+            <if test="associatedid != null  and associatedid != ''">associatedId = #{associatedid},</if>
+            <if test="orderstatus != null  and orderstatus != ''">orderStatus = #{orderstatus},</if>
+            <if test="dealamount != null ">dealAmount = #{dealamount},</if>
+            <if test="dealfee != null ">dealFee = #{dealfee},</if>
+            <if test="actualamount != null ">actualAmount = #{actualamount},</if>
+            <if test="orderaccount != null  and orderaccount != ''">orderAccount = #{orderaccount},</if>
+            <if test="chanenlid != null  and chanenlid != ''">chanenlId = #{chanenlid},</if>
+            <if test="witinfo != null  and witinfo != ''">witInfo = #{witinfo},</if>
+            <if test="externalorderid != null  and externalorderid != ''">externalOrderId = #{externalorderid},</if>
+            <if test="dealdescribe != null  and dealdescribe != ''">dealDescribe = #{dealdescribe},</if>
+            <if test="notify != null  and notify != ''">notify = #{notify},</if>
+            <if test="back != null  and back != ''">back = #{back},</if>
+            <if test="isnotify != null  and isnotify != ''">isNotify = #{isnotify},</if>
+            <if test="createtime != null ">createTime = #{createtime},</if>
+            <if test="submittime != null ">submitTime = #{submittime},</if>
+            <if test="feeid != null ">feeId = #{feeid},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="wittype != null  and wittype != ''">witType = #{wittype},</if>
+            <if test="currency != null  and currency != ''">currency = #{currency},</if>
+            <if test="msg != null  and msg != ''">msg = #{msg},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayDealWitById" parameterType="Long">
+        delete from alipay_deal_wit where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayDealWitByIds" parameterType="String">
+        delete from alipay_deal_wit where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

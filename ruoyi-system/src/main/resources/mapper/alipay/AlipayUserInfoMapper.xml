@@ -41,13 +41,14 @@
         <result property="autoWit" column="autoWit"/>
         <result property="enterWitOpen" column="enterWitOpen"/>
         <result property="interFace" column="interFace"/>
+        <result property="limitBalance" column="limitBalance"/>
     </resultMap>
 
     <sql id="selectAlipayUserInfoVo">
         select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent,
         isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status,queueList,
         privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip, dealUrl,balanceUrl
-        , qrRechargeList,autoWit,interFace,enterWitOpen  from alipay_user_info
+        , qrRechargeList,autoWit,interFace,enterWitOpen,limitBalance  from alipay_user_info
     </sql>
 
     <select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">
@@ -56,6 +57,7 @@
             <if test="userName != null  and userName != ''">and userName like concat('%', #{userName}, '%')</if>
             <if test="userType != null ">and userType = #{userType}</if>
             <if test="switchs != null ">and switchs = #{switchs}</if>
+            <if test="limitBalance != null ">and limitBalance = #{limitBalance}</if>
             <if test="agent != null  and agent != ''">and agent = #{agent}</if>
             <if test="isAgent != null  and isAgent != ''">and isAgent = #{isAgent}</if>
             <if test="credit != null ">and credit = #{credit}</if>
@@ -179,6 +181,7 @@
             <if test="minAmount != null ">minAmount = #{minAmount},</if>
             <if test="maxAmount != null ">maxAmount = #{maxAmount},</if>
             <if test="timesTotal != null ">timesTotal = #{timesTotal},</if>
+            <if test="limitBalance != null ">limitBalance = #{limitBalance},</if>
             <if test="startTime != null  and startTime != ''">startTime = #{startTime},</if>
             <if test="endTime != null  and endTime != ''">endTime = #{endTime},</if>
             <if test="witip != null  and witip != ''">witip = #{witip},</if>

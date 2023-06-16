@@ -28,6 +28,16 @@ public class AlipayUserInfo extends BaseEntity {
     private String loginName;
     private Integer colorIndex;
 
+    public Integer getLimitBalance() {
+        return limitBalance;
+    }
+
+    public void setLimitBalance(Integer limitBalance) {
+        this.limitBalance = limitBalance;
+    }
+
+    private Integer limitBalance;
+
 
     public Integer getColorIndex() {
         return colorIndex;

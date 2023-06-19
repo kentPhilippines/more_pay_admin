@@ -17,9 +17,53 @@ import java.util.Date;
  */
 public class AlipayDealOrderEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
+
+
+    private String request ;
+    private String response;
+    private String openType ;
+    private String mcRealName ;
+
+
+
+
     private String sunCountAmount = "0";
     private String sunCountAmountFee = "0";
     private String sunCountActualAmount = "0";
+
+    public String getRequest() {
+        return request;
+    }
+
+    public void setRequest(String request) {
+        this.request = request;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+    public String getOpenType() {
+        return openType;
+    }
+
+    public void setOpenType(String openType) {
+        this.openType = openType;
+    }
+
+    public String getMcRealName() {
+        return mcRealName;
+    }
+
+    public void setMcRealName(String mcRealName) {
+        this.mcRealName = mcRealName;
+    }
+
 
     public String getSunCountActualAmount() {
         return sunCountActualAmount;

@@ -98,22 +98,7 @@
             }, {
                 field: 'productName',
                 title: '产品名称'
-            },/*{
-                field: 'status',
-                title: '状态',
-                align: 'center',
-                formatter: function (value, row, index) {
-                    return statusTools(row);
-                }
-            },*/  {
-                field: 'status', title: '热点&冷门', formatter: function (value, row, index) {
-                    if (row.status == 0) {
-                        return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击切换为热点类型</a> '
-                    } else if (row.status == 1) {
-                        return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击切换为冷门类型</a> '
-                    }
-                }
-            }, {
+            },   {
                 field: 'describe',
                 title: '备注'
             }, {

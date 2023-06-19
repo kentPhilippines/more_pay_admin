@@ -99,6 +99,17 @@ public class AlipayDealWit extends BaseEntity
     @Excel(name = "说明")
     private String msg;
 
+
+
+    private String request;
+    private String response;
+    public String getRequest() {
+        return request;
+    }
+
+    public void setRequest(String request) {
+        this.request = request;
+    }
     public void setId(Long id) 
     {
         this.id = id;

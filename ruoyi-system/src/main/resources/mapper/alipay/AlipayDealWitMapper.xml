@@ -27,10 +27,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="wittype"    column="witType"    />
         <result property="currency"    column="currency"    />
         <result property="msg"    column="msg"    />
+        <result property="request"    column="request"    />
+        <result property="response"    column="response"    />
     </resultMap>
 
     <sql id="selectAlipayDealWitVo">
-        select id, orderId, associatedId, orderStatus, dealAmount, dealFee, actualAmount, orderAccount, chanenlId, witInfo, externalOrderId, dealDescribe, notify, back, isNotify, createTime, submitTime, feeId, status, witType, currency, msg from alipay_deal_wit
+        select id, orderId, associatedId, orderStatus, dealAmount, dealFee, actualAmount, orderAccount, chanenlId, witInfo, externalOrderId, dealDescribe, notify, back, isNotify, createTime, submitTime, feeId, status, witType, currency, msg,request,response from alipay_deal_wit
     </sql>
 
     <select id="selectAlipayDealWitList" parameterType="AlipayDealWit" resultMap="AlipayDealWitResult">

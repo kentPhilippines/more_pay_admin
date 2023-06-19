@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,14 +22,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 代付订单Controller
- * 
+ *
  * @author ruoyi
  * @date 2023-06-16
  */
 @Controller
 @RequestMapping("/alipay/deal_wit")
-public class AlipayDealWitController extends BaseController
-{
+public class AlipayDealWitController extends BaseController {
     private String prefix = "alipay/deal_wit";
 
     @Autowired
@@ -36,8 +36,7 @@ public class AlipayDealWitController extends BaseController
 
     @RequiresPermissions("alipay:deal_wit:view")
     @GetMapping()
-    public String deal_wit()
-    {
+    public String deal_wit() {
         return prefix + "/deal_wit";
     }
 
@@ -47,8 +46,7 @@ public class AlipayDealWitController extends BaseController
     @RequiresPermissions("alipay:deal_wit:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(AlipayDealWit alipayDealWit)
-    {
+    public TableDataInfo list(AlipayDealWit alipayDealWit) {
         startPage();
         List<AlipayDealWit> list = alipayDealWitService.selectAlipayDealWitList(alipayDealWit);
         return getDataTable(list);
@@ -61,8 +59,7 @@ public class AlipayDealWitController extends BaseController
     @Log(title = "代付订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(AlipayDealWit alipayDealWit)
-    {
+    public AjaxResult export(AlipayDealWit alipayDealWit) {
         List<AlipayDealWit> list = alipayDealWitService.selectAlipayDealWitList(alipayDealWit);
         ExcelUtil<AlipayDealWit> util = new ExcelUtil<AlipayDealWit>(AlipayDealWit.class);
         return util.exportExcel(list, "deal_wit");
@@ -72,8 +69,7 @@ public class AlipayDealWitController extends BaseController
      * 新增代付订单
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -84,8 +80,7 @@ public class AlipayDealWitController extends BaseController
     @Log(title = "代付订单", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(AlipayDealWit alipayDealWit)
-    {
+    public AjaxResult addSave(AlipayDealWit alipayDealWit) {
         return toAjax(alipayDealWitService.insertAlipayDealWit(alipayDealWit));
     }
 
@@ -93,8 +88,7 @@ public class AlipayDealWitController extends BaseController
      * 修改代付订单
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayDealWit alipayDealWit = alipayDealWitService.selectAlipayDealWitById(id);
         mmap.put("alipayDealWit", alipayDealWit);
         return prefix + "/edit";
@@ -107,8 +101,7 @@ public class AlipayDealWitController extends BaseController
     @Log(title = "代付订单", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(AlipayDealWit alipayDealWit)
-    {
+    public AjaxResult editSave(AlipayDealWit alipayDealWit) {
         return toAjax(alipayDealWitService.updateAlipayDealWit(alipayDealWit));
     }
 
@@ -117,10 +110,9 @@ public class AlipayDealWitController extends BaseController
      */
     @RequiresPermissions("alipay:deal_wit:remove")
     @Log(title = "代付订单", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(alipayDealWitService.deleteAlipayDealWitByIds(ids));
     }
 }

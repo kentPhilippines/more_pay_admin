@@ -23,6 +23,14 @@
                                 <p>订单状态:</p>
                                 <select name="orderstatus">
                                     <option value="">所有</option>
+                                    <option value="0">预下单</option>
+                                    <option value="1">处理中</option>
+                                    <option value="2">成功</option>
+                                    <option value="3">未收到回调</option>
+                                    <option value="4">失败</option>
+                                    <option value="5">超时</option>
+                                    <option value="6">订单申述</option>
+                                    <option value="7">人工处理</option>
                                 </select>
                             </li>
                             <li>
@@ -89,6 +97,8 @@
                                 <p>状态:1可使用；0不可使用：</p>
                                 <select name="status">
                                     <option value="">所有</option>
+                                    <option value="1">可用</option>
+                                    <option value="0">不可用</option>
                                 </select>
                             </li>
 <!--                            <li>-->
@@ -151,11 +161,11 @@
                 columns: [{
                     checkbox: true
                 },
-                {
-                    field : 'id', 
-                    title : '数据id',
-                    visible: false
-                },
+                // {
+                //     field : 'id',
+                //     title : '数据id',
+                //     visible: false
+                // },
                 {
                     field : 'orderid', 
                     title : '订单号'

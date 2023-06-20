@@ -77,7 +77,7 @@
     var editFlag = [[${@permission.hasPermi('alipay:deal_wit:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:deal_wit:remove')}]];
     var prefix = ctx + "alipay/deal_wit";
-    const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
+    const orderstatusDatas = [[${@dict.getType('orderStatusWIt')}]];
     $(function () {
         var options = {
             url: prefix + "/list",

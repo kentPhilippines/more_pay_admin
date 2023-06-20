@@ -65,24 +65,6 @@ public class AlipayDealWitController extends BaseController {
         return util.exportExcel(list, "deal_wit");
     }
 
-    /**
-     * 新增代付订单
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
-
-    /**
-     * 新增保存代付订单
-     */
-    @RequiresPermissions("alipay:deal_wit:add")
-    @Log(title = "代付订单", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayDealWit alipayDealWit) {
-        return toAjax(alipayDealWitService.insertAlipayDealWit(alipayDealWit));
-    }
 
     /**
      * 修改代付订单
@@ -94,25 +76,6 @@ public class AlipayDealWitController extends BaseController {
         return prefix + "/edit";
     }
 
-    /**
-     * 修改保存代付订单
-     */
-    @RequiresPermissions("alipay:deal_wit:edit")
-    @Log(title = "代付订单", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayDealWit alipayDealWit) {
-        return toAjax(alipayDealWitService.updateAlipayDealWit(alipayDealWit));
-    }
 
-    /**
-     * 删除代付订单
-     */
-    @RequiresPermissions("alipay:deal_wit:remove")
-    @Log(title = "代付订单", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(alipayDealWitService.deleteAlipayDealWitByIds(ids));
-    }
+
 }

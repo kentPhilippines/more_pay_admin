@@ -27,17 +27,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">交易媒介：</label>
-            <div class="col-sm-8">
-                    <span class="form-control" style="border: 0;">
-                        <span th:text="${alipayDealOrderEntity.orderQr}"></span>
-                      <!--  <a href="javascript:void(0);" title="点击查看二维码图片" style="margin-left: 10px;"
-                           th:data="${alipayDealOrderEntity.orderQr}" onclick="showCode(this.getAttribute('data'))"><i
-                                class="fa fa-search-plus"></i>查看二维码</a>-->
-                    </span>
-            </div>
-        </div>
-        <div class="form-group">
             <label class="col-sm-3 control-label">商户账号：</label>
             <div class="col-sm-8">
                 <span class="form-control" style="border: 0;" th:text="${alipayDealOrderEntity.orderAccount}"></span>
@@ -127,21 +116,27 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">交易备注：</label>
             <div class="col-sm-8">
-                <span class="form-control" style="border: 0;" th:text="${alipayDealOrderEntity.dealDescribe}"></span>
+                <code>
+                    <textarea class="form-control" style="border: 0;" th:text="${alipayDealOrderEntity.dealDescribe}"></textarea>
+                </code>
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">请求内容：</label>
             <div class="col-sm-8">
-                <span class="form-control" style="border: 0;" th:text="${alipayDealOrderEntity.request}"></span>
+                <code>
+                <textarea class="form-control" style="border: 0;" th:text="${alipayDealOrderEntity.request}"></textarea>
+                </code>
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">响应内容：</label>
             <div class="col-sm-8">
-                <span class="form-control" style="border: 0;" th:text="${alipayDealOrderEntity.response}"></span>
+                <code>
+                <textarea class="form-control" style="border: 0;" th:text="${alipayDealOrderEntity.response}"></textarea>
+                </code>
             </div>
         </div>
     </form>

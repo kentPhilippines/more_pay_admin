@@ -195,16 +195,13 @@
                 {
                     field: 'orderType', title: '订单类型', formatter: function (value, row, index) {
                         if (value == 1) {
-
                             var date1 = new Date(row.createTime)
                             var date2 = new Date(row.submitTime)
                             var s1 = date1.getTime(), s2 = date2.getTime();
                             var total = (s2 - s1) / 1000;
                             var table = '<ul>'
-                            table += '<li>' + '<span class="badge badge-primary">商户充值->渠道主交易订单</span>' + '</li>'
-                            if (total > 300) {
-                                table += '<li>' + '<span class="badge badge-danger">标记：人工补单 </span>' + '</li>'
-                            }
+                            table += '<li>' + '<span class="badge badge-primary">商户充值</span>' + '</li>'
+                            table += '<li>'   +  $.table.selectDictLabel(orderstatusDatas, row.orderStatus); + '</li>'
                             table += '</ul>'
                             return table;
 
@@ -215,7 +212,7 @@
                         }
                     }
                 },
-                {
+              /*  {
                     field: 'orderStatus', title: '订单状态',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
@@ -228,7 +225,7 @@
                         }
                         return table;
                     }
-                },
+                },*/
                 // {field: 'externalOrderId',   title: '外部订单号'},
                 {
                     field: 'dealAmount', title: '交易数据',
@@ -273,9 +270,11 @@
                                 table += '<li>' + '通知：未收到' + '</li>'
                             }
                         }
-                        table += '<li>' + row.orderQr + '</li>'
-                        table += '<li>' + row.dealDescribe + '</li>'
-                        table += '<li>' + row.macthMsg + '</li>'
+                        if(null != row.mcRealName ){
+                            table += '<li> 付款人' + row.mcRealName + '</li>'
+                        }
+                  //      table += '<li>' + row.dealDescribe + '</li>'
+                  //      table += '<li>' + row.macthMsg + '</li>'
                         table += '</ul>'
                         return table;
                     }
@@ -297,9 +296,8 @@
                         return table;
                     }
                 },
-                {field: 'openType', title: '打开方式'},
-                {field: 'mcRealName', title: '付款人姓名'},
-                {
+        //        {field: 'openType', title: '打开方式'},
+                 {
                     title: '操作',
                     align: 'left',
                     formatter: function (value, row, index) {

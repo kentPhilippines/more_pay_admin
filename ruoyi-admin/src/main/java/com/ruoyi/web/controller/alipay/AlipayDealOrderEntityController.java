@@ -395,6 +395,7 @@ public class AlipayDealOrderEntityController extends BaseController {
             data.setOrderAmount(dataOrigin.getDealAmount());
             dataOrigin.setActualAmount(dataOrigin.getDealAmount() - dataOrigin.getDealFee());
             dataOrigin.setOrderQr(orderQr + "【操作备注：】" + alipayDealOrderEntity.getDealDescribe());
+            dataOrigin.setCurrency(dataOrigin.getCurrency());
             return toAjax(alipayDealOrderEntityService.insertAlipayDealOrderEntity(dataOrigin, data));
         } catch (Exception e) {
             e.printStackTrace();

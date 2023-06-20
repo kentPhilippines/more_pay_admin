@@ -29,17 +29,9 @@ public class AddressUtils {
         }
 
         try {
-            String rspStr = HttpUtils.sendGet(IP_URL, "ip=" + ip + "&json=true" );
-            if (StringUtils.isEmpty(rspStr)) {
-                log.error("获取地理位置异常 {}", ip);
-                return UNKNOWN;
-            }
-            com.alibaba.fastjson.JSONObject obj = JSONObject.parseObject(rspStr);
-            String region = obj.getString("pro");
-            String city = obj.getString("city");
-            return String.format("%s %s", region, city);
+
         } catch (Exception e) {
-            log.error("获取地理位置异常 {}", e);
+
         }
         return UNKNOWN;
     }

@@ -253,11 +253,7 @@
                     title: '银行信息',
                     formatter: function (value, row, index) {
                         var table = '<ul class="bankinfo">'
-                        if (row.orderStatus == 1 && row.currency != 'CNY') {
-                            table += '<li>' + '<i class=\"btn btn-link btn-xs\" style="cursor:pointer;" title="地址"onclick="openScan(\'' + row.bankNo + '\')"><i class="fa fa-google-wallet"></i> 支付地址：' + row.bankNo + '</i> ' + '</li>';
-                        } else {
-                            table += '<li>' + '银行卡号：' + row.bankNo + ' </li>'
-                        }
+                        table += '<li>' + '银行卡号：' + row.bankNo + ' </li>'
                         table += '<li>' + '开户人：' + row.accname + ' </li>'
                         table += '<li>' + '开户行：' + row.bankName + ' </li>'
                         table += '</ul>'

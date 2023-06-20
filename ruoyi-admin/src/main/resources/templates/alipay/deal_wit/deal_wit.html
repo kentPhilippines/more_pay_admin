@@ -1,277 +1,197 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('代付订单列表')" />
+    <th:block th:include="include :: header('代付订单列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>订单号：</p>
-                                <input type="text" name="orderid"/>
-                            </li>
-                            <li>
-                                <p>关联订单号：</p>
-                                <input type="text" name="associatedid"/>
-                            </li>
-                            <li>
-<!--                                <p>订单状态:0预下单1处理中2成功3未收到回调4失败5超时6订单申述7人工处理：</p>-->
-                                <p>订单状态:</p>
-                                <select name="orderstatus">
-                                    <option value="">所有</option>
-                                    <option value="0">预下单</option>
-                                    <option value="1">处理中</option>
-                                    <option value="2">成功</option>
-                                    <option value="3">未收到回调</option>
-                                    <option value="4">失败</option>
-                                    <option value="5">超时</option>
-                                    <option value="6">订单申述</option>
-                                    <option value="7">人工处理</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>订单交易金额：</p>
-                                <input type="text" name="dealamount"/>
-                            </li>
-<!--                            <li>-->
-<!--                                <p>订单交易手续费：</p>-->
-<!--                                <input type="text" name="dealfee"/>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <p>实际到账金额：</p>-->
-<!--                                <input type="text" name="actualamount"/>-->
-<!--                            </li>-->
-                            <li>
-                                <p>订单关联商户账号：</p>
-                                <input type="text" name="orderaccount"/>
-                            </li>
-                            <li>
-                                <p>渠道账户：</p>
-                                <input type="text" name="chanenlid"/>
-                            </li>
-<!--                            <li>-->
-<!--                                <p>取款详细：</p>-->
-<!--                                <input type="text" name="witinfo"/>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <p>外部订单号(下游商户请求参数,用户数据回调)：</p>-->
-<!--                                <input type="text" name="externalorderid"/>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <p>交易备注：</p>-->
-<!--                                <input type="text" name="dealdescribe"/>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <p>订单异步回调地址：</p>-->
-<!--                                <input type="text" name="notify"/>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <p>订单同步回调地址：</p>-->
-<!--                                <input type="text" name="back"/>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <p>是否發送通知 //  YES 已發送    NO 未發送：</p>-->
-<!--                                <input type="text" name="isnotify"/>-->
-<!--                            </li>-->
-                            <li class="select-time">
-                                <p>数据生成时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreatetime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreatetime]"/>
-                            </li>
-<!--                            <li class="select-time">-->
-<!--                                <p>数据修改时间：</p>-->
-<!--                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmittime]"/>-->
-<!--                                <span>-</span>-->
-<!--                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmittime]"/>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <p>使用费率id：</p>-->
-<!--                                <input type="text" name="feeid"/>-->
-<!--                            </li>-->
-                            <li>
-                                <p>状态:1可使用；0不可使用：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                    <option value="1">可用</option>
-                                    <option value="0">不可用</option>
-                                </select>
-                            </li>
-<!--                            <li>-->
-<!--                                <p>订单交易产品类型：</p>-->
-<!--                                <select name="wittype" th:with="type=${@dict.getType('')}">-->
-<!--                                    <option value="">所有</option>-->
-<!--                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
-<!--                                </select>-->
-<!--                            </li>-->
-                            <li>
-                                <p>货币类型：</p>
-                                <input type="text" name="currency"/>
-                            </li>
-<!--                            <li>-->
-<!--                                <p>说明：</p>-->
-<!--                                <input type="text" name="msg"/>-->
-<!--                            </li>-->
-<!--                            现加在这里-->
-<!--                                                        <li>-->
-<!--                                                            <p>请求：</p>-->
-<!--                                                            <input type="text" name="request"/>-->
-<!--                                                        </li>-->
-<!--                            <li>-->
-<!--                                <p>响应：</p>-->
-<!--                                <input type="text" name="response"/>-->
-<!--                            </li>-->
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>渠道上送订单号：</p>
+                            <input type="text" name="orderId"/>
+                        </li>
+                        <li>
+                            <p>商户结算订单号：</p>
+                            <input type="text" name="associatedId"/>
+                        </li>
+                        <li>
+                            <p>商户外部订单号：</p>
+                            <input type="text" name="externalOrderId"/>
+                        </li>
+                        <li>
+                            <p>订单状态:</p>
+                            <select name="orderStatus">
+                                <option value="">所有</option>
+                                <option value="1">处理中</option>
+                                <option value="2">成功</option>
+                                <option value="4">失败</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>商户账号：</p>
+                            <input type="text" name="orderAccount"/>
+                        </li>
+                        <li>
+                            <p>渠道账户：</p>
+                            <input type="text" name="chanenlId"/>
+                        </li>
+                        <li class="select-time">
+                            <p>数据生成时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[dayStart]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[dayEnd]"/>
+                        </li>
+                        <li>
+                            <p>货币类型：</p>
+                            <input type="text" name="currency"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:deal_wit:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:deal_wit:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:deal_wit:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deal_wit:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deal_wit:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('alipay:deal_wit:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('alipay:deal_wit:remove')}]];
-        var prefix = ctx + "alipay/deal_wit";
-
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "代付订单",
-                columns: [{
-                    checkbox: true
-                },
-                // {
-                //     field : 'id',
-                //     title : '数据id',
-                //     visible: false
-                // },
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('alipay:deal_wit:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('alipay:deal_wit:remove')}]];
+    var prefix = ctx + "alipay/deal_wit";
+    const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "代付订单",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'orderid', 
-                    title : '订单号'
-                },
-                {
-                    field : 'associatedid', 
-                    title : '关联订单号'
-                },
-                {
-                    field : 'orderstatus', 
-                    title : '订单状态:'
+                    field: 'orderId',
+                    title: '订单号', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li> 渠道上送订单号 ：' + row.orderId + '</li>'
+                        table += '<li> 商户结算订单号 ：' + row.associatedId + '</li>'
+                        table += '<li> 商户外部订单号 ：' + row.externalOrderId + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
                 {
-                    field : 'dealamount', 
-                    title : '订单交易金额'
+                    field: 'orderStatus',
+                    title: '订单状态:', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li> 币种 ：' + row.currency + '</li>'
+                        table += '<li>'   +  $.table.selectDictLabel(orderstatusDatas, row.orderStatus); + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
+            },
+                {
+                    field: 'dealAmount',
+                    title: '订单交易金额', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li> 到帐金额 ：' + row.dealAmount + '</li>'
+                        table += '<li> 手续费 ：' + row.dealFee + '</li>'
+                        table += '<li> 总扣款金额 ：' + row.actualAmount + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
                 {
-                    field : 'dealfee', 
-                    title : '订单交易手续费'
+                    field: 'orderAccount',
+                    title: '账户关系', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li> 商户账户 ：' + row.orderAccount + '</li>'
+                        table += '<li> 渠道账户 ：' + row.chanenlId + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
                 {
-                    field : 'actualamount', 
-                    title : '实际到账金额'
+                    field: 'witInfo',
+                    title: '取款详细', formatter: function (value, row, index) {
+                        var table = '<ul>'
+//{"bankCode":"ICBC","bankNo":"6552626271872817217","bankName":"中国工商银行","account":"王短发"}
+                        var obj = JSON.parse(value);
+                        var bankNo = obj.bankNo;
+                        var bankName = obj.bankName;
+                        var account = obj.account;
+                        table += '<li> 卡号 ：' + bankNo + '</li>'
+                        table += '<li> 银行 ：' + bankName + '</li>'
+                        table += '<li> 账户 ：' + account + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
                 {
-                    field : 'orderaccount', 
-                    title : '订单关联商户账号'
+                    field: 'createTime',
+                    title: '创建时间', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '创建时间：' + row.createTime + '</li>'
+                        table += '<li>' + '修改时间：' + row.submitTime + '</li>'
+                        var date1 = new Date(row.createTime)
+                        var date2 = new Date(row.submitTime)
+                        var s1 = date1.getTime(), s2 = date2.getTime();
+                        var total = (s2 - s1) / 1000;
+                        table += '<li>' + '结算时间：' + total + '秒</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
-                {
-                    field : 'chanenlid', 
-                    title : '渠道账户'
-                },
-                {
-                    field : 'witinfo', 
-                    title : '取款详细'
-                },
-                {
-                    field : 'externalorderid', 
-                    title : '外部订单号'
-                },
-                // {
-                //     field : 'dealdescribe',
-                //     title : '交易备注'
-                // },
-                // {
-                //     field : 'notify',
-                //     title : '订单异步回调地址'
-                // },
-                // {
-                //     field : 'back',
-                //     title : '订单同步回调地址'
-                // },
-                // {
-                //     field : 'isnotify',
-                //     title : '是否發送通知 '
-                // },
-                {
-                    field : 'createtime', 
-                    title : '创建时间'
-                },
-                // {
-                //     field : 'submittime',
-                //     title : '数据修改时间'
-                // },
-                // {
-                //     field : 'feeid',
-                //     title : '使用费率id'
-                // },
-                // {
-                //     field : 'status',
-                //     title : '状态:'
-                // },
-                // {
-                //     field : 'wittype',
-                //     title : '订单交易产品类型'
-                // },
-                {
-                    field : 'currency', 
-                    title : '货币类型'
-                },
-                // {
-                //     field : 'msg',
-                //     title : '说明'
-                // },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
+        };
+        $.table.init(options);
+    });
+    //初始化时间
+    layui.use('laydate', function () {
+        const laydate = layui.laydate;
+        laydate.render({
+            elem: '#startTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 00:00:00",
+            isInitValue: true
         });
-    </script>
+        laydate.render({
+            elem: '#endTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 23:59:59",
+            isInitValue: true
+        });
+    });
+</script>
 </body>
 </html>

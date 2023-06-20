@@ -59,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="currency != null  and currency != ''"> and currency = #{currency}</if>
             <if test="msg != null  and msg != ''"> and msg = #{msg}</if>
         </where>
+        order by id desc
     </select>
     
     <select id="selectAlipayDealWitById" parameterType="Long" resultMap="AlipayDealWitResult">

@@ -83,5 +83,6 @@ public interface IAlipayWithdrawEntityService {
 
     void batchUpdateMacthMore(String orderIds, Integer moreMacth, String watingTime);
     void batchUpdateMacthMoreWatingTime(String ids, String watingTime);
+    public void updateWitChannel(AlipayWithdrawEntity alipayWithdrawEntity , String operate);
 
 }

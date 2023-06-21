@@ -12,6 +12,7 @@ import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.system.service.IAlipayDealWitService;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,16 +35,18 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
 
     @Autowired
     private AlipayChanelFeeMapper alipayChanelFeeMapper;
+    @Autowired
+    private IAlipayDealWitService iAlipayDealWitService;
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    public void batchUpdateChannel(List<AlipayWithdrawEntity> list)
-    {
-        list.stream().forEach(e->{
+    public void batchUpdateChannel(List<AlipayWithdrawEntity> list) {
+        list.stream().forEach(e -> {
             this.updateWithdrawEntityById(e);
         });
 
     }
+
     /**
      * 查询会员提现记录
      *
@@ -55,34 +58,40 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     public AlipayWithdrawEntity selectAlipayWithdrawEntityById(Long id) {
         return alipayWithdrawEntityMapper.selectAlipayWithdrawEntityById(id);
     }
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void updateWitChannel(AlipayWithdrawEntity alipayWithdrawEntity , String operate){
+        if("100".equals(operate)){
+             AlipayWithdrawEntity data = alipayWithdrawEntityMapper.selectAlipayWithdrawEntityById(alipayWithdrawEntity.getId());
+            //校验费率是否存在
+            AlipayChanelFee chanelFee = alipayChanelFeeMapper.findChannelBy(data.getWitChannel(), data.getWitType());
+            if (chanelFee == null) {
+                throw new BusinessException(data.getWitChannel() + "--" + data.getWitType() + "渠道费率未配置");
+            }
+            alipayWithdrawEntityMapper.updateByPrimaryKeySelective(alipayWithdrawEntity);
+        }
+    }
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public void updateWithdrawEntityById(AlipayWithdrawEntity alipayWithdrawEntity) {
         //todo 判断订单超时时间
-
-        AlipayWithdrawEntity data  = alipayWithdrawEntityMapper.selectAlipayWithdrawEntityById(alipayWithdrawEntity.getId());
+        AlipayWithdrawEntity data = alipayWithdrawEntityMapper.selectAlipayWithdrawEntityById(alipayWithdrawEntity.getId());
         DateTime now = DateTime.of(new Date());
         DateTime expireDate = DateUtil.offset(data.getCreateTime(), DateField.SECOND, data.getWatingTime());
-        if(now.isAfter(expireDate))
-        {
-            throw new BusinessException(alipayWithdrawEntity.getOrderId()+"已经超时，无法调整渠道");
+        if (now.isAfter(expireDate)) {
+            throw new BusinessException(alipayWithdrawEntity.getOrderId() + "已经超时，无法调整渠道");
         }
-
-
         //校验费率是否存在
-        AlipayChanelFee chanelFee = alipayChanelFeeMapper.findChannelBy(data.getWitChannel(),data.getWitType());
-        if(chanelFee==null)
-        {
-            throw new BusinessException(data.getWitChannel()+"--"+data.getWitType()+"渠道费率未配置");
+        AlipayChanelFee chanelFee = alipayChanelFeeMapper.findChannelBy(data.getWitChannel(), data.getWitType());
+        if (chanelFee == null) {
+            throw new BusinessException(data.getWitChannel() + "--" + data.getWitType() + "渠道费率未配置");
         }
-
-
-         alipayWithdrawEntityMapper.updateByPrimaryKeySelective(alipayWithdrawEntity);
+        alipayWithdrawEntityMapper.updateByPrimaryKeySelective(alipayWithdrawEntity);
     }
+
     /**
      * 查询会员提现记录
-     *
      * @param ids 会员提现记录ID
      * @return 会员提现记录
      */
@@ -163,14 +172,14 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int updateMacthMore(String orderId, Integer moreMacth) {
-        return alipayWithdrawEntityMapper.updateMacthMore(orderId,moreMacth);
+        return alipayWithdrawEntityMapper.updateMacthMore(orderId, moreMacth);
     }
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public void batchUpdateMacthMore(String ids, Integer moreMacth, String watingTime) {
-        Arrays.stream(ids.split(",")).forEach(id->{
-            alipayWithdrawEntityMapper.updateMacthMoreById(id,moreMacth);
+        Arrays.stream(ids.split(",")).forEach(id -> {
+            alipayWithdrawEntityMapper.updateMacthMoreById(id, moreMacth);
         });
 
     }
@@ -179,8 +188,8 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public void batchUpdateMacthMoreWatingTime(String ids, String watingTime) {
         Integer wati = Integer.valueOf(watingTime);
-        Arrays.stream(ids.split(",")).forEach(id->{
-            alipayWithdrawEntityMapper.batchUpdateMacthMoreWatingTime(id,wati);
+        Arrays.stream(ids.split(",")).forEach(id -> {
+            alipayWithdrawEntityMapper.batchUpdateMacthMoreWatingTime(id, wati);
         });
     }
 }

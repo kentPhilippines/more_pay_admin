@@ -27,4 +27,7 @@ public interface IAlipayDealWitService {
      */
     public List<AlipayDealWit> selectAlipayDealWitList(AlipayDealWit alipayDealWit);
 
+    int upteupdataOrder(String orderId, String orderStatus);
+
+
 }

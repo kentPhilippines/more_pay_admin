@@ -1488,19 +1488,6 @@ var table = {
             ,
             // 修改渠道
             editChannel: function (id) {
-                /*table.set();
-                if ($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
-                    var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
-                    if ($.common.isEmpty(row)) {
-                        $.modal.alertWarning("请至少选择一条记录");
-                        return;
-                    }
-                    var url = table.options.editChannelUrl.replace("{id}", row[table.options.uniqueId]);
-                    $.modal.approvalOpen("修改渠道" + table.options.modalName, url);
-                } else {
-                    $.modal.approvalOpen("修改渠道" + table.options.modalName, $.operate.editChannel(id));
-                }*/
-
                 var url = "/404.html";
                 if ($.common.isNotEmpty(id)) {
                     url = table.options.editChannelUrl.replace("{id}", id);

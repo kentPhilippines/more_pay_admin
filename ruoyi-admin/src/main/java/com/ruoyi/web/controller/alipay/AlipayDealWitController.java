@@ -1,7 +1,10 @@
 package com.ruoyi.web.controller.alipay;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
+import com.ruoyi.common.exception.BusinessException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,5 +80,42 @@ public class AlipayDealWitController extends BaseController {
     }
 
 
-
+    /**
+     * 交由财务处理
+     */
+    @PostMapping("/updataOrderSu")
+    @RequiresPermissions("orderDealwit:qr:status")
+    @ResponseBody
+    public AjaxResult updataOrderSu(String id) {
+        AlipayDealWit alipayDealWit = alipayDealWitService.selectAlipayDealWitById(Long.valueOf(id));
+        List list = new ArrayList();
+        list.add("1");
+        list.add("4");
+        list.add("5");
+        if(!list.contains(alipayDealWit.getOrderStatus())){
+            throw new BusinessException("该状态不允许修改");
+        }
+        alipayDealWit.setOrderStatus("2");//人工处理
+        int i = alipayDealWitService.upteupdataOrder(alipayDealWit.getOrderId(),alipayDealWit.getOrderStatus());
+        return toAjax(i);
+    }
+    /**
+     * 交由财务处理
+     */
+    @PostMapping("/updataOrderEr")
+    @RequiresPermissions("orderDealwit:qr:status")
+    @ResponseBody
+    public AjaxResult updataOrderEr(String id) {
+        AlipayDealWit alipayDealWit = alipayDealWitService.selectAlipayDealWitById(Long.valueOf(id));
+        List list = new ArrayList();
+        list.add("1");
+        list.add("4");
+        list.add("5");
+        if(!list.contains(alipayDealWit.getOrderStatus())){
+            throw new BusinessException("该状态不允许修改");
+        }
+        alipayDealWit.setOrderStatus("3");//人工处理
+        int i = alipayDealWitService.upteupdataOrder(alipayDealWit.getOrderId(),alipayDealWit.getOrderStatus());
+        return toAjax(i);
+    }
 }

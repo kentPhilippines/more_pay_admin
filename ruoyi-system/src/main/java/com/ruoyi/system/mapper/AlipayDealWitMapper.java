@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import com.ruoyi.system.domain.AlipayDealWit;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -58,4 +60,9 @@ public interface AlipayDealWitMapper {
      * @return 结果
      */
     public int deleteAlipayDealWitByIds(String[] ids);
+
+
+    @Update("update alipay_deal_wit set orderStatus  = #{orderStatus} where orderId = #{orderId}")
+    int upteupdataOrder(@Param("orderId") String orderId,   @Param("orderStatus") String orderStatus);
+
 }

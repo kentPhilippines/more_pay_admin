@@ -48,4 +48,10 @@ public class AlipayDealWitServiceImpl implements IAlipayDealWitService {
         return alipayDealWitMapper.selectAlipayDealWitList(alipayDealWit);
     }
 
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int upteupdataOrder(String orderId, String orderStatus) {
+        return alipayDealWitMapper.upteupdataOrder(orderId,orderStatus);
+    }
+
 }

@@ -25,7 +25,9 @@ import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.AlipayDealWit;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.IAlipayDealWitService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -183,16 +185,42 @@ public class AlipayWithdrawEntityController extends BaseController {
         mmap.put("productList", productlist);
         return prefix + "/editChannel";
     }
-
+    @Autowired
+    private IAlipayDealWitService alipayDealWitService;
     @PostMapping("/merchant/editChannel")
     @ResponseBody
     public AjaxResult editChannel(AlipayWithdrawEntity alipayWithdrawEntity, String operate) {
+        try {
+            reentrantLock.tryLock(10, TimeUnit.SECONDS);
+            if (cache.get(alipayWithdrawEntity.getOrderId()) != null) {
+                return error("1分钟内不允许重复操作");
+            }
+            cache.put(alipayWithdrawEntity.getOrderId(), alipayWithdrawEntity.getOrderId());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            reentrantLock.unlock();
+        }
+
         if (!operate.equals("2")) {
             alipayWithdrawEntityService.updateWitChannel(alipayWithdrawEntity, operate);
             alipayWithdrawEntity.setOrderStatus(operate);///标记检测规则
             alipayWithdrawAuditRuleService.checkRuleBeforeAudit(alipayWithdrawEntity);
             //再次推送代码
             //获取alipay处理接口URL
+            AlipayDealWit dealWit = new AlipayDealWit();
+            dealWit.setAssociatedId(alipayWithdrawEntity.getOrderId());
+            List list = new ArrayList();
+            list.add("1");
+            list.add("4");
+            list.add("5");
+            list.add("2");
+            for (AlipayDealWit alipayDealWit : alipayDealWitService.selectAlipayDealWitList(dealWit)) {
+                String orderStatus = alipayDealWit.getOrderStatus();
+                if(list.contains(orderStatus)){
+                    throw new BusinessException("存在未完成订单，请确认是否可以推送");
+                }
+            }
             SysUser currentUser = ShiroUtils.getSysUser();
             String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
             String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_7);

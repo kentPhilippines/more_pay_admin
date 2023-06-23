@@ -1,10 +1,19 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
+import com.ruoyi.alipay.service.IAlipayWithdrawEntityService;
+import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,8 +87,9 @@ public class AlipayDealWitController extends BaseController {
         mmap.put("alipayDealWit", alipayDealWit);
         return prefix + "/edit";
     }
-
-
+    private IAlipayWithdrawEntityService alipayWithdrawEntityService;
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
     /**
      * 交由财务处理
      */
@@ -97,7 +107,18 @@ public class AlipayDealWitController extends BaseController {
         }
         alipayDealWit.setOrderStatus("2");//人工处理
         int i = alipayDealWitService.upteupdataOrder(alipayDealWit.getOrderId(),alipayDealWit.getOrderStatus());
-        return toAjax(i);
+        SysUser currentUser = ShiroUtils.getSysUser();
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_7);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        mapParam.put("orderId", alipayDealWit.getAssociatedId());//订单号
+        mapParam.put("userId", alipayDealWit.getOrderAccount());
+        mapParam.put("orderStatus", alipayDealWit.getOrderStatus());
+        mapParam.put("approval", currentUser.getLoginName());
+        mapParam.put("comment", "手动成功");
+        mapParam.put("channelId", alipayDealWit.getChanenlId());
+        mapParam.put("witType", alipayDealWit.getWitType());
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
     /**
      * 交由财务处理

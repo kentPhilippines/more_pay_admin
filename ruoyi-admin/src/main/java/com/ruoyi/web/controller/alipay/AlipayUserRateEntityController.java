@@ -7,8 +7,11 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.ruoyi.alipay.domain.*;
+import com.ruoyi.alipay.domain.util.McFee;
 import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -76,29 +79,8 @@ public class AlipayUserRateEntityController extends BaseController {
         modelMap.put("channelList", channelList);
         return prefix + "/rate";
     }
-
-    static final String MSG = "【当交易额为1000时盈利：";
-    @Autowired
+     @Autowired
     private IAlipayChanelFeeService alipayChanelFeeService;
-
-    private static String getKeyedDigestUTF8(String strSrc) {
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(strSrc.getBytes("UTF8"));
-            String result = "";
-            byte[] temp;
-            temp = md5.digest("".getBytes("UTF8"));
-            for (int i = 0; i < temp.length; i++) {
-                result += Integer.toHexString((0x000000ff & temp[i]) | 0xffffff00).substring(6);
-            }
-            return result;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     /*
      * 新增用户产品费率
@@ -112,8 +94,6 @@ public class AlipayUserRateEntityController extends BaseController {
         //查询产品类型下拉菜单
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         modelMap.put("productList", list);
-        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
-        modelMap.put("rateList", rateList);
         //查询所有的商户
         alipayUserInfo.setSwitchs(1);
         alipayUserInfo.setUserType(1);
@@ -122,26 +102,7 @@ public class AlipayUserRateEntityController extends BaseController {
         return prefix + "/add";
     }
 
-    private static String createParam(Map<String, Object> map) {
-        try {
-            if (map == null || map.isEmpty()) {
-                return null;
-            }
-            Object[] key = map.keySet().toArray();
-            Arrays.sort(key);
-            StringBuffer res = new StringBuffer(128);
-            for (int i = 0; i < key.length; i++) {
-                if (ObjectUtil.isNotNull(map.get(key[i]))) {
-                    res.append(key[i] + "=" + map.get(key[i]) + "&");
-                }
-            }
-            String rStr = res.substring(0, res.length() - 1);
-            return rStr;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
     /**
      * 商户小数状态
@@ -179,13 +140,15 @@ public class AlipayUserRateEntityController extends BaseController {
         mmap.put("ids", ids);
         List<AlipayUserRateEntity> rateEntityList = alipayUserRateEntityService.findRates(ids);
         StrBuilder strBuilder = StrBuilder.create();
+        String type = "";
         for (AlipayUserRateEntity rateEntity : rateEntityList) {
-            strBuilder.append("id:").append(rateEntity.getId()).append(" 账号：").append(rateEntity.getUserId()).append(" ").append("原渠道：").
-                    append(rateEntity.getChannelId()).append(" ").append("原产品：").append(rateEntity.getPayTypr() + " ");
+            type = rateEntity.getPayTypr();
+            strBuilder.append("id:").append(rateEntity.getId()).append(" 账号：").append(rateEntity.getUserId()).append(" ").append("原产品：").append(rateEntity.getPayTypr() + " ");
         }
         mmap.put("rete", strBuilder.toString());
-        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
-        mmap.put("rateList", rateList);
+        mmap.put("type", type);
+      /*  List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        mmap.put("rateList", rateList);*/
         return prefix + "/edits";
     }
 
@@ -206,29 +169,13 @@ public class AlipayUserRateEntityController extends BaseController {
         }
         startPage();
         List<AlipayUserRateEntity> list = alipayUserRateEntityService.selectAlipayUserRateEntityList(alipayUserRateEntity);
-        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
         List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
-        ConcurrentHashMap<String, AlipayUserFundEntity> qrCollect = rateList.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         BigDecimal a = new BigDecimal("0");
         for (AlipayUserRateEntity rate : list) {
-            AlipayUserFundEntity channel = qrCollect.get(rate.getChannelId());
             AlipayProductEntity product = prCollect.get(rate.getPayTypr());
-            AlipayChanelFee channelBy = alipayChanelFeeService.findChannelBy(rate.getChannelId(), rate.getPayTypr());
-            String channelRFee = channelBy.getChannelRFee();
-            a = new BigDecimal("" + rate.getFee());
-            if (rate.getFeeType().toString().equals(PAY_TYPE)) {
-                rate.setChannelFee(channelRFee);
-                rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelRFee))));
-            } else {
-                rate.setChannelFee(channelBy.getChannelDFee());
-                rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelBy.getChannelDFee()))));
-            }
-            if (ObjectUtil.isNotNull(channel)) {
-                rate.setChannelId(channel.getUserName());
-            }
             if (ObjectUtil.isNotNull(product)) {
                 rate.setPayTypr(product.getProductName());
             }
@@ -240,14 +187,14 @@ public class AlipayUserRateEntityController extends BaseController {
      * 新增保存用户产品费率
      */
     @RequiresPermissions("merchant:rate:add")
-    @Log(title = "商户费率", businessType = BusinessType.INSERT)
+    @Log(title = "新增商户费率", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(AlipayUserRateEntity alipayUserRateEntity) {
-        AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy(alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
-        if (ObjectUtil.isNull(channel)) {
+     //  AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy(alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
+       /* if (ObjectUtil.isNull(channel)) {
             return error("当前渠道未接通，请联系技术人员对接");
-        }
+        }*/
         AlipayUserRateEntity check = alipayUserRateEntityService.checkUniqueRate(alipayUserRateEntity);
         if (null != check) {
             throw new BusinessException("操作失败，商户费率重复");
@@ -302,19 +249,27 @@ public class AlipayUserRateEntityController extends BaseController {
             try {
                 alipayUserRateEntityService.clickFee(rateEntity);
                 alipayUserRateEntityService.isAgentFee(rateEntity);
-                AlipayChanelFee channel1 = alipayChanelFeeServiceImpl.findChannelBy(rateEntity.getChannelId(), rateEntity.getPayTypr());
-                if (ObjectUtil.isNull(channel1)) {
-                    throw new BusinessException("当前渠道未接通，请联系技术人员对接");
+
+
+                JSONArray objects = JSONUtil.parseArray(rateEntity.getChannelId());
+                for (Object mf : objects) {
+                    JSONObject jsonObject = JSONUtil.parseObj(mf);
+                    McFee mcFee = jsonObject.toBean(McFee.class);
+                    AlipayChanelFee channel1 = alipayChanelFeeServiceImpl.findChannelBy( mcFee.getChannelId(), rateEntity.getPayTypr());
+                    if (ObjectUtil.isNull(channel1)) {
+                        return error("当前渠道未接通，请联系技术人员对接");
+                    }
                 }
                 alipayUserRateEntityService.updateAlipayUserRateEntity(rateEntity);
             } catch (Exception e) {
-                ThreadUtil.execute(() -> {
+              /*  ThreadUtil.execute(() -> {
                     if (e.getMessage().contains("java.sql.SQLIntegrityConstraintViolationException")) {//费率发生数据库唯一键约束
                         //停用当前费率，开启目标费率
                         int i = alipayUserRateEntityService.changeStatus(rateEntity.getId() + "", rateEntity.getUserId(), rateEntity.getFeeType() + "", "0");
                         if (i > 0) {
                             rateEntity.setStatus(null);
                             rateEntity.setSwitchs(null);
+                            rateEntity.setChannelId(null);
                             List<AlipayUserRateEntity> rateEntityList1 = alipayUserRateEntityService.selectAlipayUserRateEntityList(rateEntity);
                             if (rateEntityList1.size() == 1) {
                                 AlipayUserRateEntity rateEntity1 = rateEntityList1.get(0);
@@ -322,7 +277,7 @@ public class AlipayUserRateEntityController extends BaseController {
                             }
                         }
                     }
-                });
+                });*/
             }
 
         }
@@ -343,67 +298,15 @@ public class AlipayUserRateEntityController extends BaseController {
         //3，如以上不存在问题，则保存当前修改完费率，且对相同产品类型的费率进行关闭
         alipayUserRateEntityService.clickFee(alipayUserRateEntity);
         alipayUserRateEntityService.isAgentFee(alipayUserRateEntity);
-        AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy(alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
-        if (ObjectUtil.isNull(channel)) {
-            return error("当前渠道未接通，请联系技术人员对接");
-        }
+        JSONArray objects = JSONUtil.parseArray(alipayUserRateEntity.getChannelId());
+         for (Object mf : objects) {
+            JSONObject jsonObject = JSONUtil.parseObj(mf);
+            McFee mcFee = jsonObject.toBean(McFee.class);
+             AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy( mcFee.getChannelId(), alipayUserRateEntity.getPayTypr());
+             if (ObjectUtil.isNull(channel)) {
+                 return error("当前渠道未接通，请联系技术人员对接");
+             }
+         }
         return toAjax(alipayUserRateEntityService.updateAlipayUserRateEntity(alipayUserRateEntity));
     }
-
-    @GetMapping("/paytest")
-    @Log(title = "商户拉单测试", businessType = BusinessType.UPDATE)
-    public void payTest(HttpServletResponse response,
-                        HttpServletRequest request) throws IOException {
-        String userId = request.getParameter("userId");
-        String feeId = request.getParameter("Id");
-        AlipayUserRateEntity rateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(Long.valueOf(feeId));
-        Map<String, Object> parMap = new HashMap<>();
-        AlipayUserInfo userInfo = new AlipayUserInfo();
-        userInfo.setUserId(userId);
-        List<AlipayUserInfo> alipayUserInfos = merchantInfoEntityService.selectMerchantInfoEntityList(userInfo);
-        SimpleDateFormat d = new SimpleDateFormat("yyyyMMddHHmmss");
-        String userid = rateEntity.getUserId();
-        String key = alipayUserInfos.get(0).getPayPasword();//交易密钥
-        String publicKey = alipayUserInfos.get(0).getPublicKey();
-        String dealurl = alipayUserInfos.get(0).getDealUrl();
-        String amount = "50.00";
-        parMap.put("amount", amount);
-        parMap.put("appId", userId);
-        parMap.put("applyDate", d.format(new Date()));
-        parMap.put("notifyUrl", dealurl);
-        parMap.put("pageUrl", dealurl);
-        parMap.put("orderId", IdUtil.simpleUUID());
-        parMap.put("passCode", rateEntity.getPayTypr());
-        parMap.put("subject", amount);
-        parMap.put("userid", "王富贵");
-        String createParam = createParam(parMap);
-        logger.info("签名前请求串：" + createParam);
-        String md5 = getKeyedDigestUTF8(createParam + key);
-        logger.info("签名：" + md5);
-        parMap.put("sign", md5);
-        String createParam2 = createParam(parMap);
-        logger.info("加密前字符串：" + createParam2);
-        String publicEncrypt = RSAUtils.publicEncrypt(createParam2, publicKey);
-        logger.info("加密后字符串：" + publicEncrypt);
-        Map<String, Object> postMap = new HashMap<String, Object>();
-        postMap.put("cipherText", publicEncrypt);
-        postMap.put("userId", userid);
-        logger.info("请求参数：" + postMap.toString());
-         String post = HttpUtil.post(dealurl + "/deal/pay", postMap);
-        logger.info("相应结果集：" + post);
-        JSONObject json = JSONObject.parseObject(post);
-        String result = json.getString("success");
-        if (StrUtil.isNotEmpty(result) && result.equals("true")) {
-            response.setContentType("text/html; charset=UTF-8");
-            response.sendRedirect(json.getJSONObject("result").getString("returnUrl"));
-
-            //  ().write(json.getJSONObject("result").getString("returnUrl"));
-        } else {
-            String message = json.getString("message");
-            response.setContentType("text/html; charset=UTF-8");
-            response.getWriter().write(message);
-        }
-        return;
-    }
-
 }

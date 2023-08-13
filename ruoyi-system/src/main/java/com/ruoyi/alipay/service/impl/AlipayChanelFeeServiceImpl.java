@@ -100,6 +100,10 @@ public class AlipayChanelFeeServiceImpl implements IAlipayChanelFeeService {
 	@Override
 	@DataSource(DataSourceType.ALIPAY_SLAVE)
 	public AlipayChanelFee findChannelBy(String channelId, String payTypr) {
+
+
+
+
 		return alipayChanelFeeMapper.findChannelBy(channelId, payTypr);
 	}
 

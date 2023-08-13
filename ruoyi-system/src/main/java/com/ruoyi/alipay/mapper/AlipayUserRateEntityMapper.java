@@ -120,16 +120,16 @@ public interface AlipayUserRateEntityMapper {
             "<if test=\"payTypr != null and payTypr != ''\">" +
             " and payTypr = #{payTypr}" +
             "</if>" +
-            "<if test=\"channelId != null and channelId != ''\">" +
+          /*  "<if test=\"channelId != null and channelId != ''\">" +
             " and channelId = #{channelId}" +
-            "</if>" +
+            "</if>" +*/
             " and status = 1" +
             " and switchs = 1 " +
             "</script> ")
-    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType, @Param("channelId") String channel, @Param("payTypr") String payTypr);
+    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType,/* @Param("channelId") String channel,*/ @Param("payTypr") String payTypr);
 
     @Select("select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where " +
-            "userId = #{alipayUserRateEntity.userId}   and payTypr = #{alipayUserRateEntity.payTypr} and status = 1 and channelId = #{alipayUserRateEntity.channelId}")
+            "userId = #{alipayUserRateEntity.userId}   and payTypr = #{alipayUserRateEntity.payTypr} and status = 1  ")
     AlipayUserRateEntity checkUniqueRate(@Param("alipayUserRateEntity") AlipayUserRateEntity alipayUserRateEntity);
 
     @Update("update alipay_user_rate set switchs = 0   where " +
@@ -162,8 +162,8 @@ public interface AlipayUserRateEntityMapper {
      * @param payTypr
      * @return
      */
-    @Select("select * from alipay_user_rate where userId = #{userId}  and channelId = #{channelId} and payTypr = #{payTypr}")
-    AlipayUserRateEntity findFee(@Param("userId") String userId, @Param("channelId") String channelId, @Param("payTypr") String payTypr);
+    @Select("select * from alipay_user_rate where userId = #{userId}   and payTypr = #{payTypr}")
+    AlipayUserRateEntity findFee(@Param("userId") String userId, @Param("payTypr") String payTypr);
 
     List<AlipayUserRateEntity> findRates(String[] ids);
 

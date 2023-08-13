@@ -2,6 +2,7 @@ package com.ruoyi.alipay.domain;
 
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,9 +14,9 @@ import java.util.Date;
  * @author ruoyi
  * @date 2020-05-15
  */
+@Data
 public class AlipayChanelFee extends BaseEntity {
     private static final long serialVersionUID = 1L;
-
     /**
      * 数据id
      */
@@ -32,7 +33,6 @@ public class AlipayChanelFee extends BaseEntity {
      */
     @Excel(name = "产品id")
     private String productId;
-
     /**
      * 实体类对应关系
      */
@@ -41,34 +41,6 @@ public class AlipayChanelFee extends BaseEntity {
     private String channelRFee;
     private String channelDFee;
     private String channelNo;
-
-    public String getChannelNo() {
-        return this.channelNo;
-    }
-
-    public void setChannelNo(String channelNo) {
-        this.channelNo = channelNo;
-    }
-
-
-    public void setChannelRFee(String channelRFee) {
-        this.channelRFee = channelRFee;
-    }
-
-    public String getChannelRFee() {
-        return this.channelRFee;
-    }
-
-    ;
-
-    public void setChannelDFee(String channelDFee) {
-        this.channelDFee = channelDFee;
-    }
-
-    public String getChannelDFee() {
-        return this.channelDFee;
-    }
-
     /**
      * null
      */
@@ -80,55 +52,6 @@ public class AlipayChanelFee extends BaseEntity {
      */
     @Excel(name = "1为可用  2为不可用")
     private Integer status;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setChannelId(String channelId) {
-        this.channelId = channelId;
-    }
-
-    public String getChannelId() {
-        return channelId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setImpl(String impl) {
-        this.impl = impl;
-    }
-
-    public String getImpl() {
-        return impl;
-    }
-
-    public void setSubmitTime(Date submitTime) {
-        this.submitTime = submitTime;
-    }
-
-    public Date getSubmitTime() {
-        return submitTime;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)

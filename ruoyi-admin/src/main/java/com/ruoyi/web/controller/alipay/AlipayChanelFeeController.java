@@ -1,9 +1,14 @@
 package com.ruoyi.web.controller.alipay;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.ruoyi.alipay.domain.AlipayChanelFee;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+import com.ruoyi.alipay.domain.util.McFee;
 import com.ruoyi.alipay.service.IAlipayChanelFeeService;
 import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
@@ -20,7 +25,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -39,8 +47,7 @@ public class AlipayChanelFeeController extends BaseController {
     @Autowired private IAlipayUserFundEntityService alipayUserFundEntityService;
     @Autowired IAlipayProductService iAlipayProductService;
 	@Autowired private IAlipayChanelFeeService alipayChanelFeeService;
-
-	@RequiresPermissions("alipay:channelFee:view")
+ 	@RequiresPermissions("alipay:channelFee:view")
 	@GetMapping()
 	public String fee(ModelMap modelMap) {
 		AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
@@ -77,6 +84,53 @@ public class AlipayChanelFeeController extends BaseController {
 			}
 		}
 		return getDataTable(list);
+	}
+	/**
+	 * 查询渠道费率列表
+	 */
+	@RequiresPermissions("alipay:channelFee:listFee")
+	@PostMapping("/listFee")
+	@ResponseBody
+	public TableDataInfo listFee(AlipayChanelFee alipayChanelFee) {
+		List<AlipayChanelFee> list = alipayChanelFeeService.selectAlipayChanelFeeList(alipayChanelFee);
+		List<McFee> listFee = new ArrayList<>();
+		for(AlipayChanelFee rate : list) {
+			McFee mf = new McFee();
+			mf.setChannelId(rate.getChannelId());
+			listFee.add(mf);
+		}
+		return getDataTable(listFee);
+	}
+	@RequiresPermissions("alipay:channelFee:listFee")
+	@PostMapping("/listFee1")
+	@ResponseBody
+	public TableDataInfo listFee1(AlipayChanelFee alipayChanelFee) {
+		AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(alipayChanelFee.getId());
+		alipayChanelFee.setId(null);
+		alipayChanelFee.setProductId(alipayUserRateEntity.getPayTypr());
+		String channelId = alipayUserRateEntity.getChannelId();
+		JSONArray objects = JSONUtil.parseArray(channelId);
+		List<McFee> listFee = new ArrayList<>();
+		Map<String,McFee> map = new HashMap<>();
+		for (Object mf : objects) {
+			JSONObject jsonObject = JSONUtil.parseObj(mf);
+			McFee mcFee = jsonObject.toBean(McFee.class);
+			String channelId1 = mcFee.getChannelId();
+			map.put(channelId1,mcFee);
+		}
+		List<AlipayChanelFee> list = alipayChanelFeeService.selectAlipayChanelFeeList(alipayChanelFee);
+		for(AlipayChanelFee rate : list) {
+			McFee mf = new McFee();
+			McFee mcFee = map.get(rate.getChannelId());
+			if(null != mcFee){
+				mf.setRotation(mcFee.getRotation());
+				mf.setPriority(mcFee.getPriority());
+				mf.setChecked(true);
+			}
+			mf.setChannelId(rate.getChannelId());
+			listFee.add(mf);
+		}
+		return getDataTable(listFee);
 	}
 
 	/**

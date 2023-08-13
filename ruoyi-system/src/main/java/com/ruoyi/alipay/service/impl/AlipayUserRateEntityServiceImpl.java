@@ -3,9 +3,13 @@ package com.ruoyi.alipay.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.ruoyi.alipay.domain.AlipayChanelFee;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+import com.ruoyi.alipay.domain.util.McFee;
 import com.ruoyi.alipay.mapper.AlipayChanelFeeMapper;
 import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
 import com.ruoyi.alipay.mapper.AlipayUserRateEntityMapper;
@@ -83,7 +87,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         }
         if (StringUtils.isNotEmpty(result.getAgent())) {
             //查询上级同类型费率
-            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(),alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
+            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(),/*alipayUserRateEntity.getChannelId(),*/ alipayUserRateEntity.getPayTypr());
             if (agentRate == null) { //是否为空
                 throw new BusinessException("此商户的上级代理未设置同类型的费率或此费率通道已关闭");
             }
@@ -155,7 +159,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         }
         if (StringUtils.isNotEmpty(result.getAgent())) {
             //查询上级同类型费率
-            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(), alipayUserRateEntity.getChannelId(),alipayUserRateEntity.getPayTypr() );
+            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(), /*alipayUserRateEntity.getChannelId(),*/alipayUserRateEntity.getPayTypr() );
             if (agentRate == null) { //是否为空
                 throw new BusinessException("此码商的上级代理未设置同类型的费率或此费率通道已关闭");
             }
@@ -216,9 +220,15 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
     public Boolean clickFee(AlipayUserRateEntity alipayUserRateEntity) {
         if (StringUtils.isEmpty(alipayUserRateEntity.getChannelId()) || StringUtils.isEmpty(alipayUserRateEntity.getPayTypr()))
             throw new BusinessException("数据错误，联系开发人员处理");
-        AlipayChanelFee channelBy = alipayChanelFeeDao.findChannelBy(alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
-        if (ObjectUtil.isNull(channelBy)) {
-            throw new BusinessException("当前修改完费率，渠道费率未配置，请联系技术配置渠道费率");
+        String channelId = alipayUserRateEntity.getChannelId();
+        JSONArray objects = JSONUtil.parseArray(channelId);
+        for (Object mf : objects) {
+            JSONObject jsonObject = JSONUtil.parseObj(mf);
+            McFee mcFee = jsonObject.toBean(McFee.class);
+            AlipayChanelFee channelBy = alipayChanelFeeDao.findChannelBy( mcFee.getChannelId(), alipayUserRateEntity.getPayTypr());
+            if (ObjectUtil.isNull(channelBy)) {
+                throw new BusinessException("当前修改完费率，渠道费率未配置，请联系技术配置渠道费率");
+            }
         }
         return true;
     }
@@ -277,7 +287,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserRateEntity findUserByChannel(String userId, String product, String channelId) {
-        return alipayUserRateEntityMapper.findFee(userId, channelId, product);
+        return alipayUserRateEntityMapper.findFee(userId, product);
     }
 
 
@@ -291,7 +301,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
     AlipayUserRateEntity findAgentFee(AlipayUserInfo userInfo, AlipayUserRateEntity alipayUserRateEntity) {
         if (StrUtil.isNotBlank(userInfo.getAgent())) {//当前商户是否存在代理商，如果存在验证是否存在修改完代理商费率为配置的情况
             AlipayUserInfo userInfo1 = alipayUserInfoMapper.selectMerhantInfoByUserId(userInfo.getAgent());
-            AlipayUserRateEntity agentRateEntity = alipayUserRateEntityMapper.findFee(userInfo1.getUserId(), alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
+            AlipayUserRateEntity agentRateEntity = alipayUserRateEntityMapper.findFee(userInfo1.getUserId(),  alipayUserRateEntity.getPayTypr());
             if (ObjectUtil.isNull(agentRateEntity)) {
                 return null;
             } else {

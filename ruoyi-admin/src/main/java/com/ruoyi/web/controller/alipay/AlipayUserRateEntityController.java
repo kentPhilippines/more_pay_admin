@@ -244,13 +244,10 @@ public class AlipayUserRateEntityController extends BaseController {
             if (CollUtil.isNotEmpty(users) || users.size() > 0) {
                 continue;// 凡是存在下级代理商户的商户费率一律不允许批量切换，代理商费率批量结算容易造成业务bug
             }
-            String channelId = rateEntity.getChannelId();
             rateEntity.setChannelId(channel);
             try {
                 alipayUserRateEntityService.clickFee(rateEntity);
                 alipayUserRateEntityService.isAgentFee(rateEntity);
-
-
                 JSONArray objects = JSONUtil.parseArray(rateEntity.getChannelId());
                 for (Object mf : objects) {
                     JSONObject jsonObject = JSONUtil.parseObj(mf);

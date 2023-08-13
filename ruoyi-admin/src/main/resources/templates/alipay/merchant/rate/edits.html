@@ -20,7 +20,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">渠道名称：</label>
             <div class="row">
-                <input name="channelId" id = "channelId" class="form-control" type="hidden">
+                <input name="channelId" id="channelId" class="form-control" type="hidden">
                 <div class="col-sm-12 select-table table-striped">
                     <table id="bootstrap-table"></table>
                 </div>
@@ -30,17 +30,19 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: select2-js"/>
-<th:block th:include="include :: bootstrap-table-editable-js" />
+<th:block th:include="include :: bootstrap-table-editable-js"/>
 <script type="text/javascript">
     const prefix = ctx + "alipay/rate";
     const prefixFee = ctx + "alipay/channelFee"
-     function submitHandler() {
+
+    function submitHandler() {
         let ids = $('#ids').val()
         getSelections();
         let channel = $("#channelId").val()
         var date = {'ids': ids, 'channel': channel}
         $.operate.save(prefix + "/edits", date);
     }
+
     function query(payType) {
         var options = {
             url: prefixFee + "/listFee?productId=" + payType,
@@ -88,31 +90,27 @@
                             {
                                 value: 8,
                                 text: "优先级8"
-                            },  {
+                            }, {
                                 value: 9,
                                 text: "优先级9"
-                            },  {
+                            }, {
                                 value: 10,
                                 text: "优先级10"
-                            },  {
+                            }, {
                                 value: 11,
                                 text: "优先级11"
-                            } , {
+                            }, {
                                 value: 12,
                                 text: "优先级12"
                             }
                         ]
                     }
-                },
-                {
-                    field: 'rotation',
-                    title: '轮询次数[若不修改默认为5]',
-                    editable: true
                 }
             ]
         };
         $.table.init(options);
     }
+
     $("#payTypr").change(function () {
         var payType = $(this).val();
         query(payType);
@@ -125,7 +123,7 @@
     })
 
     /* 查询表格选择行数据值 */
-    function getSelections(){
+    function getSelections() {
         var data = $("#" + table.options.id).bootstrapTable('getSelections');
         $("input[name='channelId']").val(JSON.stringify(data))
     }

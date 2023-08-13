@@ -19,6 +19,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -123,7 +124,6 @@ public class AlipayChanelFeeController extends BaseController {
 			McFee mf = new McFee();
 			McFee mcFee = map.get(rate.getChannelId());
 			if(null != mcFee){
-				mf.setRotation(mcFee.getRotation());
 				mf.setPriority(mcFee.getPriority());
 				mf.setChecked(true);
 			}
@@ -177,14 +177,13 @@ public class AlipayChanelFeeController extends BaseController {
 	 */
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+		String loginName = ShiroUtils.getLoginName();
 		AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
 		AlipayChanelFee alipayChanelFee = alipayChanelFeeService.selectAlipayChanelFeeById(id);
 		mmap.put("alipayChanelFee", alipayChanelFee);
 		List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
 		mmap.put("productList", list);
-	    List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
-	    mmap.put("rateList", rateList);
-	    
+		mmap.put("userId", loginName);
 		return prefix + "/edit";
 	}
 

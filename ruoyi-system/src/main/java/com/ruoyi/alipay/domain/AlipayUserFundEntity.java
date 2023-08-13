@@ -20,7 +20,24 @@ public class AlipayUserFundEntity extends BaseEntity {
     private Double minAmount;
     private String idStr;
     private Integer colorIndex;
+    private Integer timesTotal;
+    private Integer limitBalance;
 
+    public Integer getLimitBalance() {
+        return limitBalance;
+    }
+
+    public void setLimitBalance(Integer limitBalance) {
+        this.limitBalance = limitBalance;
+    }
+
+    public Integer getTimesTotal() {
+        return timesTotal;
+    }
+
+    public void setTimesTotal(Integer timesTotal) {
+        this.timesTotal = timesTotal;
+    }
 
     public Integer getColorIndex() {
         return colorIndex;

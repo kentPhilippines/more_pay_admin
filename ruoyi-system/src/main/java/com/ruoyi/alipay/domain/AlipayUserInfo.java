@@ -285,7 +285,7 @@ public class AlipayUserInfo extends BaseEntity {
      * 下单次数
      */
     @Excel(name = "下单次数")
-    private Integer timesTotal;
+    private Integer timesTotal = 0;
 
     /**
      * 限制时间-开始时间

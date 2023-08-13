@@ -12,12 +12,6 @@ public class McFee {
      * 优先级
      */
     Integer priority = 1 ;
-    /**
-     * 轮训次数
-     */
-    String rotation = "5";
-
-
 
     Boolean checked;
 

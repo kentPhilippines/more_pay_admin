@@ -100,6 +100,8 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
             channel.setRemitOrderState(userInfo.getRemitOrderState());
             channel.setMaxAmount(userInfo.getMaxAmount());
             channel.setMinAmount(userInfo.getMinAmount());
+            channel.setTimesTotal(userInfo.getTimesTotal());
+            channel.setLimitBalance(userInfo.getLimitBalance());
         }
         return channelAccount;
     }

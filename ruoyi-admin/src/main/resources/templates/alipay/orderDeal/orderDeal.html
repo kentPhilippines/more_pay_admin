@@ -32,17 +32,14 @@
                             <select class="selectpicker" data-none-selected-text="请选择" id="currency"
                                     name="currency" th:with="type=${@dict.getType('currency')}">
                                 <option value="">所有</option>
-                                <!-- <option th:each="dict : ${type}" th:selected="${dict.dictLabel}=='CNY'? 'selected':''"
-                                         th:text="${dict.dictLabel}"
-                                         th:value="${dict.dictValue}"></option>-->
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-                        <!--<li>
+                        <li>
                             <span>渠道账户：</span>
                             <input type="text" name="orderQrUser"/>
-                        </li>-->
+                        </li>
                         <li class="select-selectpicker">
                             <label>产品类型：</label>
                             <select class="selectpicker" data-none-selected-text="请选择" id="retain1" name="retain1">
@@ -118,10 +115,6 @@
                shiro:hasPermission="orderDeal:qr:statistics">
                 <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>
-<!--            <a class="btn btn-primary" onclick="$.operate.statisticsMerchant('商户当天交易数据')"-->
-<!--               shiro:hasPermission="orderDeal:merchant:statistics">-->
-<!--                <i class="fa fa-bar-chart"></i> 商户当天数据统计-->
-<!--            </a>-->
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -262,7 +255,11 @@
                 {
                     field: 'orderQr', title: '交易详情', formatter: function (value, row, index) {
                         var table = '<ul>'
+                        if(null !=  value){
+                            table += '<li> ' + value + '</li>'
+                        }
                         if (row.orderStatus == 2) {
+
                             if (row.isNotify == 'YES') {
 
                                 table += '<li>' + '通知：已发送' + '</li>'
@@ -273,6 +270,7 @@
                         if(null != row.mcRealName ){
                             table += '<li> 付款人' + row.mcRealName + '</li>'
                         }
+
                   //      table += '<li>' + row.dealDescribe + '</li>'
                   //      table += '<li>' + row.macthMsg + '</li>'
                         table += '</ul>'

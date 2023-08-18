@@ -63,7 +63,6 @@ public class AlipayChanelFeeController extends BaseController {
 	/**
 	 * 查询渠道费率列表
 	 */
-	@RequiresPermissions("alipay:channelFee:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayChanelFee alipayChanelFee) {
@@ -89,7 +88,6 @@ public class AlipayChanelFeeController extends BaseController {
 	/**
 	 * 查询渠道费率列表
 	 */
-	@RequiresPermissions("alipay:channelFee:listFee")
 	@PostMapping("/listFee")
 	@ResponseBody
 	public TableDataInfo listFee(AlipayChanelFee alipayChanelFee) {
@@ -102,7 +100,6 @@ public class AlipayChanelFeeController extends BaseController {
 		}
 		return getDataTable(listFee);
 	}
-	@RequiresPermissions("alipay:channelFee:listFee")
 	@PostMapping("/listFee1")
 	@ResponseBody
 	public TableDataInfo listFee1(AlipayChanelFee alipayChanelFee) {

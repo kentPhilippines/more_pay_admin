@@ -41,7 +41,7 @@ public interface IMerchantInfoEntityService {
      * @param merchantInfoEntity 商户信息
      * @return 结果
      */
-    int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
+    int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity) throws Exception;
 
     /**
      * 修改商户信息

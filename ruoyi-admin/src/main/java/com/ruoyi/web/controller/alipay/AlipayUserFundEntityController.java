@@ -21,6 +21,7 @@ import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.GoogleUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -45,7 +46,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/alipay/fund")
 public class AlipayUserFundEntityController extends BaseController {
     private String prefix = "alipay/fund";
-
+    @Autowired
+    private GoogleUtils googleUtils;
     @Autowired
     private IAlipayUserFundEntityService alipayUserFundEntityService;
     @Autowired
@@ -100,7 +102,7 @@ public class AlipayUserFundEntityController extends BaseController {
         if (StringUtils.isBlank(currencyFilter)) {
             currencyFilter = "USDT-CNY";
         }
-        Integer colorIndex = alipayUserFundEntity.getColorIndex()==null?0:alipayUserFundEntity.getColorIndex()+1;
+        Integer colorIndex = alipayUserFundEntity.getColorIndex() == null ? 0 : alipayUserFundEntity.getColorIndex() + 1;
         List<AlipayUserFundEntity> list = new ArrayList<>();
         List<AlipayUserInfo> alipayUserInfoList = merchantInfoEntityService.selectChildrenByUserId(alipayUserFundEntity.getAgent());
         String str = "";
@@ -142,7 +144,7 @@ public class AlipayUserFundEntityController extends BaseController {
                 }
             }
         }
-        list.stream().forEach(tmp2->{
+        list.stream().forEach(tmp2 -> {
             tmp2.setColorIndex(colorIndex);
         });
         return getDataTable(list);
@@ -270,7 +272,33 @@ public class AlipayUserFundEntityController extends BaseController {
         if (!currentUser.getPassword().equals(verify)) {
             return AjaxResult.error("密码验证失败");
         }
-        return toAjax(alipayAmountEntityService.insertAlipayAmountEntity(alipayAmountEntity));
+       /* String googleCode = alipayAmountEntity.getParams().get("googleCode").toString();
+        int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
+        if (is == 0) {
+            return AjaxResult.error("未绑定谷歌验证器");
+        } else if (is - 1 > 0) {
+            return AjaxResult.error("谷歌验证码验证失败");
+        }*/
+        int i = alipayAmountEntityService.insertAlipayAmountEntity(alipayAmountEntity);
+        if (i > 0) {
+            //获取alipay处理接口URL
+            String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+            String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_3);
+            Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+            mapParam.put("id", alipayAmountEntity.getId());
+            mapParam.put("userId", alipayAmountEntity.getUserId());
+            mapParam.put("amount", alipayAmountEntity.getAmount());
+            mapParam.put("orderStatus", "3");//通过
+            mapParam.put("orderId", alipayAmountEntity.getOrderId());//订单号
+            mapParam.put("approval", currentUser.getLoginName());//审核人
+            mapParam.put("comment", "加款通过");//审核人
+            AjaxResult ajaxResult = HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
+            return ajaxResult;
+        } else {
+            return toAjax(0);
+        }
+
+
     }
 
     /**
@@ -314,8 +342,6 @@ public class AlipayUserFundEntityController extends BaseController {
         }
         return toAjax(alipayAmountEntityService.insertAlipayAmountQuota(alipayAmountEntity));
     }
-
-
     /**
      * 新增减款页面显示
      */
@@ -326,8 +352,6 @@ public class AlipayUserFundEntityController extends BaseController {
         mmap.put("userFund", userFundEntity);
         return prefix + "/deduct";
     }
-
-
     /**
      * 减款保存用户减款记录
      */
@@ -365,7 +389,7 @@ public class AlipayUserFundEntityController extends BaseController {
         mapParam.put("accname", currentUser.getLoginName());//申请人
         mapParam.put("orderStatus", DeductStatusEnum.DEDUCT_STATUS_PROCESS.getCode());
         mapParam.put("orderId", GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_DEDUCT));
-        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
-    }
+        return   HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
+       }
 
 }

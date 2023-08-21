@@ -150,7 +150,7 @@ public class MerchantInfoEntityController extends BaseController {
     @Log(title = "商户信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(AlipayUserInfo merchantInfoEntity) {
+    public AjaxResult addSave(AlipayUserInfo merchantInfoEntity) throws Exception {
         int i = merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity);
         int n = saveSysUser(merchantInfoEntity);
         if (i > 0 && n > 0) {
@@ -168,8 +168,8 @@ public class MerchantInfoEntityController extends BaseController {
     private int saveSysUser(AlipayUserInfo merchantInfoEntity) {
         SysUser user = new SysUser();
         user.setSalt(ShiroUtils.randomSalt());
-        user.setPassword(passwordService.encryptPassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getBackPassword(), user.getSalt()));
-        user.setFundPassword(passwordService.encryptPassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getFundPassword(), user.getSalt()));
+        user.setPassword(passwordService.encryptPassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPassword(), user.getSalt()));
+        user.setFundPassword(passwordService.encryptPassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPassword(), user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
         user.setMerchantId(merchantInfoEntity.getUserId());
         user.setRemark(merchantInfoEntity.getIpStr() + "&0");
@@ -350,7 +350,7 @@ public class MerchantInfoEntityController extends BaseController {
     @Log(title = "商户信息", businessType = BusinessType.INSERT)
     @PostMapping("/save/children")
     @ResponseBody
-    public AjaxResult saveChildrenAccount(AlipayUserInfo merchantInfoEntity) {
+    public AjaxResult saveChildrenAccount(AlipayUserInfo merchantInfoEntity) throws Exception {
         int n = merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity);
         int i = saveSysUser(merchantInfoEntity);
         if (i > 0 && n > 0) {

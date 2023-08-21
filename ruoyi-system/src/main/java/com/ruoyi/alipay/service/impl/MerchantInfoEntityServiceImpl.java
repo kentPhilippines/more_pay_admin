@@ -15,6 +15,7 @@ import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.HashKit;
+import com.ruoyi.common.utils.RSAUtil;
 import com.ruoyi.common.utils.RSAUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,23 +86,24 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     @Transactional(rollbackFor = Exception.class)
-    public int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity) {
-        List<String> keys = RSAUtils.genKeyPair();
-        if (keys == null) {
+    public int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity) throws Exception {
+        String[] strings = RSAUtil.generateRSAKeyPair();
+        if (strings == null) {
             throw new BusinessException("获取密钥对错误，操作失败");
         }
         String salt = HashKit.randomSalt();
-        String md5 = HashKit.encodePassword(merchantInfoEntity.getUserId(), "123456", salt);//登陆密码
+        String md5 = HashKit.encodePassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPassword(), salt);//登陆密码
         String dealKey = UUID.randomUUID().toString().replace("-", "").toUpperCase();
         merchantInfoEntity.setPassword(md5);
         merchantInfoEntity.setSalt(salt);
-        merchantInfoEntity.setPayPasword(dealKey);
+        merchantInfoEntity.setPayPasword(md5);
         merchantInfoEntity.setUserType(1);
         merchantInfoEntity.setIsAgent("1");
         merchantInfoEntity.setAgent(merchantInfoEntity.getAgent());
         merchantInfoEntity.setIsAgent(String.valueOf(1));
-        merchantInfoEntity.setPublicKey(keys.get(0));
-        merchantInfoEntity.setPrivateKey(keys.get(1));
+        merchantInfoEntity.setPublicKey(strings[0]);
+        merchantInfoEntity.setPrivateKey(strings[1]);
+        merchantInfoEntity.setCurrency("RMB");
         // merchantInfoEntityMapper.findBackUserByUserId(merchantInfoEntity.getAgent())
         AlipayUserFundEntity fund = alipayUserFundEntityMapper.findUserFundCurrencyById(merchantInfoEntity.getAgent());
         if (null != fund) {

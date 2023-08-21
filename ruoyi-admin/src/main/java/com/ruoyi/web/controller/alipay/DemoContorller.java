@@ -3,7 +3,9 @@ package com.ruoyi.web.controller.alipay;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.core.controller.BaseController;
@@ -11,6 +13,7 @@ import com.ruoyi.web.controller.alipay.bean.DepositRequestVO;
 import com.ruoyi.web.controller.alipay.bean.WithdrawRequestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +24,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/alipay/demo")
@@ -32,19 +36,38 @@ public class DemoContorller extends BaseController {
 
 
     private String prefix = "alipay/demo";
-
+    @Autowired
+    IAlipayProductService iAlipayProductService;
 //    @RequiresPermissions("alipay:demo:view")
     @GetMapping(value = "/deposit")
-    public String deposit()
+    public String deposit(ModelMap modelMap)
     {
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        AlipayUserInfo alipayUserInfo = new AlipayUserInfo();
+        alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("2");
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        modelMap.put("productList", list);
+        //查询所有的商户
+        alipayUserInfo.setSwitchs(1);
+        alipayUserInfo.setUserType(1);
+        List<AlipayUserInfo> userInfo = alipayUserInfoService.selectAllUserInfoList(alipayUserInfo);
+        modelMap.put("merList", userInfo);
         return prefix + "/deposit";
     }
 
 
 //    @RequiresPermissions("alipay:demo:view")
     @GetMapping(value = "/wit")
-    public String wit()
+    public String wit(ModelMap modelMap)
     {
+        AlipayUserInfo alipayUserInfo = new AlipayUserInfo();
+        //查询所有的商户
+        alipayUserInfo.setSwitchs(1);
+        alipayUserInfo.setUserType(1);
+        List<AlipayUserInfo> userInfo = alipayUserInfoService.selectAllUserInfoList(alipayUserInfo);
+        modelMap.put("merList", userInfo);
         return prefix + "/wit";
     }
 

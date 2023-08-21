@@ -36,10 +36,10 @@
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-                        <li>
+                   <!--     <li>
                             <span>渠道账户：</span>
                             <input type="text" name="orderQrUser"/>
-                        </li>
+                        </li>-->
                         <li class="select-selectpicker">
                             <label>产品类型：</label>
                             <select class="selectpicker" data-none-selected-text="请选择" id="retain1" name="retain1">
@@ -48,15 +48,15 @@
                                         th:value="${product.productId}"></option>
                             </select>
                         </li>
-                        <li class="select-selectpicker">
+                     <!--   <li class="select-selectpicker">
                             <label>撮合锁定： </label>
                             <select data-none-selected-text="请选择" id="macthStatus" name="macthStatus">
                                 <option value="">所有</option>
                                 <option value="1">撮合未支付</option>
                                 <option value="2"> 撮合已支付</option>
                             </select>
-                        </li>
-                        <li class="select-selectpicker">
+                        </li>-->
+                     <!--   <li class="select-selectpicker">
                             <label>订单类型：</label>
                             <select class="selectpicker" data-none-selected-text="请选择" id="orderType" name="orderType">
                                 <option value="">所有</option>
@@ -65,7 +65,7 @@
                                 <option value="3">卡商充值渠道主交易订单</option>
 
                             </select>
-                        </li>
+                        </li>-->
                         <li class="select-selectpicker">
                             <label>渠道类型：</label>
                             <select class="selectpicker" data-none-selected-text="请选择" id="orderQrUser"
@@ -76,7 +76,7 @@
                             </select>
                         </li>
                          <li>
-                             <span>交易数据：</span>
+                             <span>卡密数据：</span>
                              <input type="text" name="orderQr"/>
                          </li>
                         <li class="select-selectpicker">
@@ -193,7 +193,7 @@
                             var s1 = date1.getTime(), s2 = date2.getTime();
                             var total = (s2 - s1) / 1000;
                             var table = '<ul>'
-                            table += '<li>' + '<span class="badge badge-primary">商户充值</span>' + '</li>'
+                            table += '<li>' + '<span class="badge badge-primary">卡密核销</span>' + '</li>'
                             table += '<li>'   +  $.table.selectDictLabel(orderstatusDatas, row.orderStatus); + '</li>'
                             table += '</ul>'
                             return table;

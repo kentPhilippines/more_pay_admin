@@ -70,8 +70,9 @@ public class AlipayDealOrderEntityController extends BaseController {
     public String orderDeal(ModelMap mmap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
-        //查询产品类型下拉菜单
+        alipayProductEntity.setProductCode("2");
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        //查询产品类型下拉菜单
         mmap.put("productList", list);
         List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
         mmap.put("rateList", rateList);
@@ -265,7 +266,7 @@ public class AlipayDealOrderEntityController extends BaseController {
      * 显示具体统计内容
      */
     @PostMapping("/statistics/qr/order")
-    @RequiresPermissions("orderDeal:qr:statistics")
+    //@RequiresPermissions("orderDeal:qr:statistics")
     @ResponseBody
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
         startPage();
@@ -285,7 +286,7 @@ public class AlipayDealOrderEntityController extends BaseController {
      * 显示具体统计内容
      */
     @PostMapping("/statistics/merchant/order")
-    @RequiresPermissions("orderDeal:merchant:statistics")
+    //@RequiresPermissions("orderDeal:merchant:statistics")
     @ResponseBody
     public TableDataInfo merchantdayStat(StatisticsMerchantEntity statisticsMerchantEntity) {
         startPage();

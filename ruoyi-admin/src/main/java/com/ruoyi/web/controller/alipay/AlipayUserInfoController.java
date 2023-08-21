@@ -86,7 +86,7 @@ public class AlipayUserInfoController extends BaseController {
         mapParam.put("userId", alipayUserInfo.getUserId());
         mapParam.put("userName", alipayUserInfo.getUserName());
         mapParam.put("password", alipayUserInfo.getPassword());
-        mapParam.put("payPasword", alipayUserInfo.getPayPasword());
+        mapParam.put("payPasword", alipayUserInfo.getPassword());
         mapParam.put("userType", 2);//码商代码
         mapParam.put("isAgent", 1);//是否为代理
         mapParam.put("email", alipayUserInfo.getEmail());

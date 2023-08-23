@@ -120,7 +120,11 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
         return alipayDealOrderAppMapper.insertAlipayDealOrderApp(alipayDealOrderApp);
     }
 
-
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayDealOrderApp> selectAlipayDealOrderAppListDealOrder(AlipayDealOrderApp alipayDealOrderApp) {
+        return alipayDealOrderAppMapper.selectAlipayDealOrderAppListDealOrder(alipayDealOrderApp);
+    }
 
 
 }

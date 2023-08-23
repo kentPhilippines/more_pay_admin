@@ -183,4 +183,6 @@ public interface AlipayDealOrderAppMapper {
      */
     AlipayDealOrderApp selectAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
 
+    List<AlipayDealOrderApp> selectAlipayDealOrderAppListDealOrder(AlipayDealOrderApp alipayDealOrderApp);
+
 }

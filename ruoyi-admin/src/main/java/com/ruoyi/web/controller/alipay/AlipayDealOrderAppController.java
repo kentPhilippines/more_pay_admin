@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.alipay;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.ruoyi.alipay.domain.AlipayDealOrderApp;
+import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.service.IAlipayDealOrderAppService;
@@ -56,6 +57,12 @@ public class AlipayDealOrderAppController extends BaseController {
         mmap.put("productList", list);
         return prefix + "/orderApp";
     }
+    @GetMapping("/backOrderUrl")
+    public String orderAppDeal(@PathVariable("id") Long id, ModelMap mmap   ) {
+        AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(id);
+        mmap.put("alipayDealOrder", alipayDealOrderApp);
+        return prefix + "/backOrderUrl";
+    }
 
     /**
      * 查询商户订单登记列表
@@ -65,6 +72,16 @@ public class AlipayDealOrderAppController extends BaseController {
     public TableDataInfo list(AlipayDealOrderApp alipayDealOrderApp) {
         startPage();
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
+        return getDataTable(list);
+    }
+   /**
+     * 查询商户订单登记列表
+     */
+    @PostMapping("/listorderDeal")
+    @ResponseBody
+    public TableDataInfo listorderDeal(AlipayDealOrderApp alipayDealOrderApp) {
+        startPage();
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppListDealOrder(alipayDealOrderApp);
         return getDataTable(list);
     }
 
@@ -166,5 +183,26 @@ public class AlipayDealOrderAppController extends BaseController {
         return getDataTable(list);
     }
 
+
+    /**
+     * 补单数据保存
+     */
+    @Log(title = "提交卡密", businessType = BusinessType.INSERT)
+    @PostMapping("/backOrderSave")
+    @ResponseBody
+    public AjaxResult backOrderSave(AlipayDealOrderEntity alipayDealOrderEntity) {
+        String dealDescribe = alipayDealOrderEntity.getDealDescribe().trim();
+
+
+
+
+
+
+
+
+
+        return toAjax(1);
+
+    }
 
 }

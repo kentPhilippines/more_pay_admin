@@ -141,6 +141,16 @@ public class AlipayDealOrderEntityController extends BaseController {
         AlipayDealOrderEntity order = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(Long.valueOf(id));
         order.setOrderStatus("7");//人工处理
         int i = alipayDealOrderEntityService.updateAlipayDealOrderEntity(order);
+
+
+
+
+
+
+
+
+
+
         return toAjax(i);
     }
 

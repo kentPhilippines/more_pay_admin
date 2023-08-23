@@ -52,8 +52,36 @@
                txhash
         from alipay_deal_order_app
     </sql>
+    <sql id="selectAlipayDealOrderAppVoDealOrder">
+        select doa.id,
+               doa.orderId,
+               doa.currency,
+               doa.orderType,
+               doa.orderAccount,
+               doa.orderStatus,
+               doa.dealDescribe,
+               doa.orderAmount,
+               doa.actualAmount,
+               doa.orderIp,
+               doa.appOrderId,
+               doa.feeId,
+               doa.notify,
+               doa.back,
+               doa.submitTime,
+               doa.createTime,
+               doa.status,
+               doa.retain1,
+               doa.retain2,
+               doa.retain3,
+               doa.txhash ,
+               do.orderQrUser as channelId,
+               do.orderQr as orderQr,
+               do.createTime as createTimeChannel
+        from alipay_deal_order_app  doa      LEFT JOIN alipay_deal_order do ON   doa.orderId = do.associatedId
+    </sql>
 
-    <select id="selectAlipayDealOrderAppList" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
+
+     <select id="selectAlipayDealOrderAppList" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
         <include refid="selectAlipayDealOrderAppVo"/>
         <where>
             createTime between #{params.dayStart} and #{params.dayEnd}
@@ -217,4 +245,27 @@
             #{id}
         </foreach>
     </delete>
+
+
+
+
+    <select id="selectAlipayDealOrderAppListDealOrder" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
+        <include refid="selectAlipayDealOrderAppVoDealOrder"/>
+        <where>
+            doa.createTime between #{params.dayStart} and #{params.dayEnd}
+            <if test="orderType != null ">and doa.orderType = #{orderType}</if>
+            <if test="orderId != null and orderId != ''">and doa.orderId = #{orderId}</if>
+            <if test="orderAccount != null  and orderAccount != ''">and doa.orderAccount = #{orderAccount}</if>
+            <if test="orderStatus != null  and orderStatus != ''">and doa.orderStatus = #{orderStatus}</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">and doa.dealDescribe = #{dealDescribe}</if>
+            <if test="orderAmount != null ">and doa.orderAmount = #{orderAmount}</if>
+            <if test="orderIp != null  and orderIp != ''">and doa.orderIp = #{orderIp}</if>
+            <if test="appOrderId != null  and appOrderId != ''">and doa.appOrderId = #{appOrderId}</if>
+            <if test="retain1 != null  and retain1 != ''">and doa.retain1 = #{retain1}</if>
+            <if test="channelId != null  and channelId != ''">and do.orderQrUser = #{channelId}</if>
+            <if test="orderQr != null  and orderQr != ''">and do.orderQr =  like concat('%', #{orderQr} , '%')</if>
+            <if test="channelTime != null  and channelTime != ''">and TO_DAYS(do.createTime) =  TO_DAYS(channelTime)</if>
+        </where>
+        order by id desc
+    </select>
 </mapper>

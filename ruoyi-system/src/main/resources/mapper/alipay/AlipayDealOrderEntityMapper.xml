@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayDealOrderEntityMapper">
 
     <resultMap type="AlipayDealOrderEntity" id="AlipayDealOrderEntityResult">
-        <result property="id"    column="id"    />
-        <result property="orderId"    column="orderId"    />
-        <result property="associatedId"    column="associatedId"    />
-        <result property="orderStatus"    column="orderStatus"    />
-        <result property="dealAmount"    column="dealAmount"    />
-        <result property="dealFee"    column="dealFee"    />
-        <result property="actualAmount"    column="actualAmount"    />
-        <result property="orderType"    column="orderType"    />
-        <result property="orderAccount"    column="orderAccount"    />
-        <result property="orderQrUser"    column="orderQrUser"    />
-        <result property="orderQr"    column="orderQr"    />
-        <result property="externalOrderId"    column="externalOrderId"    />
-        <result property="generationIp"    column="generationIp"    />
-        <result property="dealDescribe"    column="dealDescribe"    />
-        <result property="notify"    column="notify"    />
-        <result property="back"    column="back"    />
-        <result property="isNotify"    column="isNotify"    />
+        <result property="id" column="id"/>
+        <result property="orderId" column="orderId"/>
+        <result property="associatedId" column="associatedId"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <result property="dealAmount" column="dealAmount"/>
+        <result property="dealFee" column="dealFee"/>
+        <result property="actualAmount" column="actualAmount"/>
+        <result property="orderType" column="orderType"/>
+        <result property="orderAccount" column="orderAccount"/>
+        <result property="orderQrUser" column="orderQrUser"/>
+        <result property="orderQr" column="orderQr"/>
+        <result property="externalOrderId" column="externalOrderId"/>
+        <result property="generationIp" column="generationIp"/>
+        <result property="dealDescribe" column="dealDescribe"/>
+        <result property="notify" column="notify"/>
+        <result property="back" column="back"/>
+        <result property="isNotify" column="isNotify"/>
         <result property="createTime" column="createTime"/>
         <result property="submitTime" column="submitTime"/>
         <result property="feeId" column="feeId"/>
@@ -41,20 +41,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="mcRealName" column="mcRealName"/>
 
 
-
         <result property="macthMsg" column="macthMsg"/>
         <result property="macthStatus" column="macthStatus"/>
-
-
-
 
 
     </resultMap>
 
     <sql id="selectAlipayDealOrderEntityVo">
-        select id, orderId,currency, macthStatus,macthMsg,associatedId, orderStatus, dealAmount, dealFee, actualAmount, orderType, orderAccount, orderQrUser, orderQr, externalOrderId, generationIp, dealDescribe, notify, back, isNotify, createTime, submitTime, feeId, status, retain1, retain2, retain3, retain4 , txhash,request,response,openType,mcRealName from alipay_deal_order
+        select id,
+               orderId,
+               currency,
+               macthStatus,
+               macthMsg,
+               associatedId,
+               orderStatus,
+               dealAmount,
+               dealFee,
+               actualAmount,
+               orderType,
+               orderAccount,
+               orderQrUser,
+               orderQr,
+               externalOrderId,
+               generationIp,
+               dealDescribe,
+               notify,
+               back,
+               isNotify,
+               createTime,
+               submitTime,
+               feeId,
+               status,
+               retain1,
+               retain2,
+               retain3,
+               retain4,
+               txhash,
+               request,
+               response,
+               openType,
+               mcRealName
+        from alipay_deal_order
     </sql>
-    <select id="selectAlipayDealOrderEntityList" parameterType="AlipayDealOrderEntity" resultMap="AlipayDealOrderEntityResult">
+    <select id="selectAlipayDealOrderEntityList" parameterType="AlipayDealOrderEntity"
+            resultMap="AlipayDealOrderEntityResult">
         <include refid="selectAlipayDealOrderEntityVo"/>
         <where>
             createTime between #{params.dayStart} and #{params.dayEnd}
@@ -96,8 +126,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectAlipayOrderList" parameterType="AlipayDealOrderEntity" resultMap="AlipayDealOrderEntityResult">
         <include refid="selectAlipayDealOrderEntityVo"/>
         <where>
-            <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
-            <if test="associatedId != null  and associatedId != ''"> and associatedId = #{associatedId}</if>
+            <if test="orderId != null  and orderId != ''">and orderId = #{orderId}</if>
+            <if test="associatedId != null  and associatedId != ''">and associatedId = #{associatedId}</if>
             <choose>
                 <when test="orderStatus != null  and orderStatus != ''">
                     and orderStatus = #{orderStatus}
@@ -106,14 +136,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     and (orderStatus = 2 or orderStatus = 7 )
                 </otherwise>
             </choose>
-            <if test="orderType != null  and orderType != ''"> and orderType = #{orderType}</if>
-            <if test="orderAccount != null  and orderAccount != ''"> and orderAccount = #{orderAccount}</if>
-            <if test="orderQrUser != null  and orderQrUser != ''"> and orderQrUser = #{orderQrUser}</if>
-            <if test="orderQr != null  and orderQr != ''"> and orderQr = #{orderQr}</if>
-            <if test="externalOrderId != null  and externalOrderId != ''"> and externalOrderId = #{externalOrderId}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
-            <if test="status != null "> and status = #{status}</if>
+            <if test="orderType != null  and orderType != ''">and orderType = #{orderType}</if>
+            <if test="orderAccount != null  and orderAccount != ''">and orderAccount = #{orderAccount}</if>
+            <if test="orderQrUser != null  and orderQrUser != ''">and orderQrUser = #{orderQrUser}</if>
+            <if test="orderQr != null  and orderQr != ''">and orderQr = #{orderQr}</if>
+            <if test="externalOrderId != null  and externalOrderId != ''">and externalOrderId = #{externalOrderId}</if>
+            <if test="createTime != null ">and createTime = #{createTime}</if>
+            <if test="submitTime != null ">and submitTime = #{submitTime}</if>
+            <if test="status != null ">and status = #{status}</if>
         </where>
     </select>
 
@@ -122,7 +152,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <insert id="insertAlipayDealOrderEntity" parameterType="AlipayDealOrderEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertAlipayDealOrderEntity" parameterType="AlipayDealOrderEntity" useGeneratedKeys="true"
+            keyProperty="id">
         insert into alipay_deal_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderId != null  and orderId != ''">orderId,</if>
@@ -224,7 +255,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteAlipayDealOrderEntityById" parameterType="Long">
-        delete from alipay_deal_order where id = #{id}
+        delete
+        from alipay_deal_order
+        where id = #{id}
     </delete>
 
     <delete id="deleteAlipayDealOrderEntityByIds" parameterType="String">

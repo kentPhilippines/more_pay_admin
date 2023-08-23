@@ -86,4 +86,7 @@ public interface IAlipayDealOrderAppService {
      */
     int insertAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
 
+    List<AlipayDealOrderApp> selectAlipayDealOrderAppListDealOrder(AlipayDealOrderApp alipayDealOrderApp);
+
+
 }

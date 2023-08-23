@@ -129,6 +129,9 @@
     const backOrderFlag = [[${@permission.hasPermi('orderDeal:qr:backOrder')}]];
     const notifyFlag = [[${@permission.hasPermi('orderDeal:qr:renotify')}]];
     const updataOrder = [[${@permission.hasPermi('orderDeal:qr:status')}]];
+    var enterOrder = [[${@permission.hasPermi('alipay:order:enterOrder')}]];
+
+    var prefix11 = ctx + "alipay/order";
     //数据
     const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
     //请求路径
@@ -314,7 +317,10 @@
                         }
                         if (row.orderStatus != 7 && row.orderStatus != '2') {
                             if (day < 7) {
+/*
                                 actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
+*/
+                                actions.push('<a class="btn btn-danger btn-xs ' + enterOrder + '" href="javascript:void(0)" onclick="onEnterOrder(\'' + row.id + '\',\'' + "SU" + '\' )"><i class="fa fa-google-wallet"></i>置为成功</a> ');
                             }
                         }
                         if (row.orderStatus === '1' && row.orderType == 4) {
@@ -367,6 +373,12 @@
             isInitValue: true
         });
     });
+
+    function onEnterOrder(id, orderStatus) {
+        $.modal.confirm("确认修改订单？", function () {
+            $.operate.post(prefix11 + "/updataOrder", {"id": id, "orderStatus": orderStatus});
+        })
+    }
 </script>
 </body>
 </html>

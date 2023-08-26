@@ -166,7 +166,9 @@
                         }else  if(null != row.channelOrderStatus && 4 == row.channelOrderStatus){
                             table += '<li>' + '<span class="badge badge-warning">核销失败</span>' + '</li>'
                         }
-
+                        if( 1 == value){
+                            table += $.table.selectDictLabel(orderstatusDatas, value);
+                        }
                         if (null != row.orderQr) {
                             table += '<li>' + row.orderQr + '</li>'
                         } else {

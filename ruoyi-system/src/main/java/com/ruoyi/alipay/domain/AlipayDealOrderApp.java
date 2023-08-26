@@ -22,7 +22,11 @@ public class AlipayDealOrderApp extends BaseEntity {
 
 
     private String channelId;
+    private String channelDealDescribe;
+    private String channelOrderId;
     private String orderQr;
+    private String channelOrderStatus;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date channelTime;
 
 

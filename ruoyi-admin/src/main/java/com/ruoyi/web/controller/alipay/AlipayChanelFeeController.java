@@ -50,8 +50,9 @@ public class AlipayChanelFeeController extends BaseController {
 	@Autowired private IAlipayChanelFeeService alipayChanelFeeService;
  	@RequiresPermissions("alipay:channelFee:view")
 	@GetMapping()
-	public String fee(ModelMap modelMap) {
+	public String fee(ModelMap modelMap , String productId) {
 		AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+		alipayProductEntity.setProductId(productId);
         //查询产品类型下拉菜单
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         modelMap.put("productList", list);

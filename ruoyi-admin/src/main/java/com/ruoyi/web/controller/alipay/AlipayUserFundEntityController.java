@@ -272,7 +272,7 @@ public class AlipayUserFundEntityController extends BaseController {
         if (!currentUser.getPassword().equals(verify)) {
             return AjaxResult.error("密码验证失败");
         }
-       /* String googleCode = alipayAmountEntity.getParams().get("googleCode").toString();
+     /*    String googleCode = alipayAmountEntity.getParams().get("googleCode").toString();
         int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
         if (is == 0) {
             return AjaxResult.error("未绑定谷歌验证器");
@@ -367,6 +367,13 @@ public class AlipayUserFundEntityController extends BaseController {
         if (!currentUser.getPassword().equals(verify)) {
             return AjaxResult.error("密码验证失败");
         }
+      /*  String googleCode = alipayAmountEntity.getParams().get("googleCode").toString();
+        int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
+        if (is == 0) {
+            return AjaxResult.error("未绑定谷歌验证器");
+        } else if (is - 1 > 0) {
+            return AjaxResult.error("谷歌验证码验证失败");
+        }*/
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_5);

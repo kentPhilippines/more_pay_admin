@@ -75,7 +75,7 @@ public interface AlipayDealOrderEntityMapper {
     List<StatisticsMerchantEntity> selectStatMerchantDateByDay(@Param("statisticsMerchantEntity") StatisticsMerchantEntity statisticsMerchantEntity);
 
     @Select("<script>" +
-            "select '所有' userId, 'USDT' productName, " +
+   /*         "select '所有' userId, 'USDT' productName, " +
             "coalesce(sum(dealAmount),0) totalAmount," +
             "coalesce(sum(case orderStatus when 2 then dealAmount else 0 end),0) successAmount," +
             "coalesce(sum(case orderStatus when 2 then retain3 else 0 end),0) profit," +
@@ -84,7 +84,7 @@ public interface AlipayDealOrderEntityMapper {
             "from alipay_deal_order where createTime between #{statisticsEntity.params.dayStart}" +
             " and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
             "and currency = 'USDT' " +
-            " union all " +
+            " union all " +*/
             "select '所有' userId, 'CNY' productName, " +
             "coalesce(sum(dealAmount),0) totalAmount," +
             "coalesce(sum(case orderStatus when 2 then dealAmount else 0 end),0) successAmount," +
@@ -160,5 +160,7 @@ public interface AlipayDealOrderEntityMapper {
     AlipayDealOrderEntity selectAlipayDealOrderEntityListSum(AlipayDealOrderEntity alipayDealOrderEntity);
 
     int insertAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity);
+    @Select("select * from alipay_deal_order where associatedId = #{orderId}")
+    AlipayDealOrderEntity findOrderByOrderIdAss(@Param("orderId") String orderId);
 
 }

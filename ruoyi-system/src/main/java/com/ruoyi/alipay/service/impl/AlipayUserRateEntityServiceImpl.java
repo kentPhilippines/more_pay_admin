@@ -290,6 +290,12 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         return alipayUserRateEntityMapper.findFee(userId, product);
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void delectUser(String userId) {
+        alipayUserRateEntityMapper.delectUser(userId);
+    }
+
 
     /**
      * 无限级代理递归检测费率

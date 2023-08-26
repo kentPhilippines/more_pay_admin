@@ -131,4 +131,7 @@ public interface IAlipayUserRateEntityService {
      * @return
      */
     AlipayUserRateEntity findUserByChannel(String orderAccount, String product, String orderQrUser);
+
+    void delectUser(String userId);
+
 }

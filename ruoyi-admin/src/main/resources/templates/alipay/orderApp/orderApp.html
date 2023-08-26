@@ -20,8 +20,16 @@
                             <input name="appOrderId" type="text"/>
                         </li>
                         <li>
+                            <span>核销订单：</span>
+                            <input name="channelOrderId" type="text"/>
+                        </li>
+                        <li>
                             <span>商户账号：</span>
                             <input type="text" id="orderAccount" name="orderAccount"/>
+                        </li>
+                        <li>
+                            <span>核销账号：</span>
+                            <input type="text" id="channelId" name="channelId"/>
                         </li>
                         <li class="select-selectpicker">
                             <label>状态： </label>
@@ -39,6 +47,10 @@
                                 <option th:each="product : ${productList}" th:text="${product.productName}"
                                         th:value="${product.productId}"></option>
                             </select>
+                        </li>
+                        <li>
+                            <span>卡密：</span>
+                            <input type="text" id="orderQr" name="orderQr"/>
                         </li>
                         <!--<li class="select-selectpicker">
                             <label>货币类型： </label>
@@ -74,7 +86,12 @@
             </a>
             <a class="btn btn-primary" onclick="$.operate.statistics('统计当天交易订单数据（商户）')"
                shiro:hasPermission="orderApp:merchant:statistics">
-                <i class="fa fa-bar-chart"></i> 当天数据统计
+                <i class="fa fa-bar-chart"></i> 当天商户数据统计
+            </a>
+
+            <a class="btn btn-success" onclick="$.operate.statisticsUrlDeal('统计当天交易数据(核销)')"
+               shiro:hasPermission="orderDeal:qr:statistics">
+                <i class="fa fa-bar-chart"></i> 当天核销数据统计
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -90,54 +107,90 @@
     const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
     const backOrderFlag = [[${@permission.hasPermi('orderDeal:qr:backOrder')}]];
     const prefix = ctx + "alipay/orderApp";
+    const prefixDeal = ctx + "alipay/orderDeal";
+    const prefix11 = ctx + "alipay/order";
     $(function () {
         var options = {
             url: prefix + "/listorderDeal",
             detailUrl: prefix + "/edit/{id}",
             statisticsUrl: prefix + "/statistics/merchant/table",
+            statisticsUrlDeal: prefixDeal + "/statistics/qr/table",
             exportUrl: prefix + "/export",
             backOrderUrl: prefix + "/backOrderUrl/{id}",
             modalName: "商户交易订单",
             columns: [{
-                checkbox: true
+                checkbox: true,
+                visible: false
             },
-                /*
-                                {field: 'id', title: '数据id', visible: false},
-                */
-                {field: 'orderId', title: '平台订单'},
-                {field: 'orderAccount', title: '账号',
+                {
+                    field: 'orderId', title: '平台订单', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '商户订单：' + row.orderId + '</li>'
+                        table += '<li>' + '外部订单：' + row.appOrderId + '</li>'
+                        if (null == row.channelOrderId) {
+                            table += '<li>' + '核销订单： 暂未提交</li>'
+                        } else {
+                            table += '<li>' + '核销订单：' + row.channelOrderId + '</li>'
+                        }
+                        table += '</ul>'
+                        return table;
+                    }
+                },
+                {
+                    field: 'orderAccount', title: '账号',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
-                        table += '<li>' + '商户：' + row.orderAmount + '</li>'
-                        table += '<li>' + '渠道：' + row.orderAmount + '</li>'
-                        table += '<li>' + '产品：' + row.orderAmount + '</li>'
+                        table += '<li>' + '商户：' + row.orderAccount + '</li>'
+                        if (null == row.channelId) {
+                            table += '<li>' + '核销： 暂未提交卡密</li>'
+                        } else {
+                            table += '<li>' + '核销：' + row.channelId + '</li>'
+                        }
+
+                        table += '<li>' + '产品：' + row.retain1 + '</li>'
 
                         return table;
-                    }},
-                {field: 'appOrderId', title: '商户单号'},
+                    }
+                },
                 {
                     field: 'orderStatus', title: '状态&类型',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
-                        table += '<li>' + '<span class="badge badge-primary">卡密核销</span>' + '</li>'
-                        table +=   $.table.selectDictLabel(orderstatusDatas, value);
-                        return table ;
+                        if (null != row.channelOrderStatus &&  1 == row.channelOrderStatus) {
+                            table += '<li>' + '<span class="badge badge-primary">正在核销</span>' + '</li>'
+                        } else if(null != row.channelOrderStatus && 4 == row.channelOrderStatus){
+                            table += '<li>' + '<span class="badge badge-warning">'+row.channelDealDescribe+'</span>' + '</li>'
+                        }
+                        if(null != row.channelOrderStatus && 2 == row.channelOrderStatus){
+                            table += '<li>' + '<span class="badge badge-primary">核销成功</span>' + '</li>'
+                        }else  if(null != row.channelOrderStatus && 4 == row.channelOrderStatus){
+                            table += '<li>' + '<span class="badge badge-warning">核销失败</span>' + '</li>'
+                        }
+
+                        if (null != row.orderQr) {
+                            table += '<li>' + row.orderQr + '</li>'
+                        } else {
+                            table += '<li>未提交卡密</li>'
+                        }
+                        return table;
                     }
                 },
 
-                {field: 'orderAmount', title: '订单金额 ',
+                {
+                    field: 'orderAmount', title: '订单金额 ',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
                         table += '<li>' + '订单金额：' + row.orderAmount + '</li>'
                         table += '<li>' + '实际到账金额：' + row.actualAmount + '</li>'
-                        table += '<li>' + '交易手续费：' + row.retain3 + '</li>'
+                        /*
+                                                table += '<li>' + '交易手续费：' + row.retain3 + '</li>'
+                        */
                         table += '</ul>'
                         return table;
-                    }},
-
-
-           /*     {field: 'actualAmount', title: '实际金额 '},
-                {field: 'retain3', title: '交易手续费'},*/
+                    }
+                },
+                /*     {field: 'actualAmount', title: '实际金额 '},
+                     {field: 'retain3', title: '交易手续费'},*/
                 /*
                                 {field: 'orderIp', title: '订单生成IP'},
                                  var date1 = new Date(row.createTime)
@@ -152,7 +205,8 @@
                 */
 
 
-                {field: 'createTime', title: '时间',
+                {
+                    field: 'createTime', title: '时间',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
                         var date1 = new Date(row.createTime)
@@ -161,13 +215,17 @@
                         var total = (s2 - s1) / 1000;
 
                         table += '<li>' + '创建时间：' + row.createTime + '</li>'
-                        table += '<li>' + '上传时间：' + row.createTimeOrder + '</li>'
+                        if (null == row.channelId) {
+                            table += '<li>' + '上传时间： 暂未提交</li>'
+                        } else {
+                            table += '<li>' + '上传时间：' + row.channelTime + '</li>'
+                        }
                         table += '<li>' + '核销时间：' + row.submitTime + '</li>'
                         table += '<li>' + '结算时间：' + total + '</li>'
                         table += '</ul>'
                         return table;
                     }
-                    },
+                },
                 /*
                                 {field: 'dealDescribe', title: '交易备注'},
                 */
@@ -179,14 +237,25 @@
                         /*
                                                 actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
                         */
-
-                        if (row.orderStatus != 2  ) {
+                        /*   if (day < 7) {
+                               actions.push('<a class="btn btn-primary btn-xs ' + backOrderFlag + '" onclick="$.operate.openAccount(\'' + row.id + '\',\'补单\',\'backOrderUrl\')"><i class="fa fa-plus"></i>补单</a> ');
+                           }*/
+                        if (row.orderStatus != 2) {
                             actions.push('<a class="btn btn-primary btn-xs ' + backOrderFlag + '" onclick="$.operate.openAccount(\'' + row.id + '\',\'核销卡密\',\'backOrderUrl\')"><i class="fa fa-plus"></i>核销卡密</a> ');
                         }
 
                         /*
                                                 actions.push('<a class="btn btn-danger btn-xs ' + updateOrder + '" href="javascript:void(0)" onclick="onUpdateOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>核销卡密</a> ');
                         */
+                        /*      if (row.orderStatus != 2 && row.orderStatus != 3) {
+                               if (day < 7) {
+
+                                                                   actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
+
+                                actions.push('<a class="btn btn-danger btn-xs  " href="javascript:void(0)" onclick="onEnterOrder(\'' + row.id + '\',\'' + "SU" + '\' )"><i class="fa fa-google-wallet"></i>置为成功</a> ');
+                            }
+                        }        */
+
                         return actions.join('');
                     }
                 }]
@@ -219,6 +288,12 @@
             isInitValue: true
         });
     });
+
+    function onEnterOrder(id, orderStatus) {
+        $.modal.confirm("确认修改订单？", function () {
+            $.operate.post(prefix11 + "/updataOrder", {"id": id, "orderStatus": orderStatus});
+        })
+    }
 </script>
 </body>
 </html>

@@ -143,6 +143,12 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
         return i1;
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayDealOrderEntity findOrderByOrderIdAss(String orderId) {
+        return alipayDealOrderEntityMapper.findOrderByOrderIdAss(orderId);
+
+    }
 
 
 }

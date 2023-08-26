@@ -97,6 +97,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int deleteAlipayUserInfoByIds(String ids) {
         return alipayUserInfoMapper.deleteAlipayUserInfoByIds(Convert.toStrArray(ids));
     }

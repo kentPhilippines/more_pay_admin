@@ -4,6 +4,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
+import com.ruoyi.alipay.service.IAlipayUserInfoService;
+import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
@@ -358,5 +361,24 @@ public class MerchantInfoEntityController extends BaseController {
         }
         return error();
     }
+    @Autowired
+    private IAlipayUserRateEntityService alipayUserRateEntityService;
+    @Autowired
+    private IAlipayUserInfoService alipayUserInfoService;
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
+    /**
+     * 删除用户详情(调用api)
+     */
+    @Log(title = "用户详情", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        AlipayUserInfo userInfo = alipayUserInfoService.selectAlipayUserInfoById(Long.valueOf(ids));
+        alipayUserInfoService.deleteAlipayUserInfoByIds(ids);
+        alipayUserFundEntityService.delectUser(userInfo.getUserId());
+        alipayUserRateEntityService.delectUser(userInfo.getUserId());
+        return toAjax(1 );
 
+    }
 }

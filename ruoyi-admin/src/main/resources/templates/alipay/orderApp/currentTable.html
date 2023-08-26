@@ -87,6 +87,14 @@
 					title: '用户昵称'
 				},
                 {
+                    field: 'successPercent',
+                    title: '成功率',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return calSuccessPercent(row);
+                    }
+                }
+                {
                     field: 'totalCount',
                     title: '交易订单总数'
                 },
@@ -102,6 +110,7 @@
                     field: 'successAmount',
                     title: '成功交易金额'
                 },
+
                 {
                     field: 'successFee',
                     title: '收取手续费'
@@ -114,14 +123,7 @@
                     field: 'accountAmount',
                     title: '当前商户余额'
                 },
-                {
-                    field: 'successPercent',
-                    title: '成功率',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        return calSuccessPercent(row);
-                    }
-                }]
+                ]
         };
         $.table.init(options);
     });

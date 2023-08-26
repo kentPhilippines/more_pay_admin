@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -192,4 +193,6 @@ public interface AlipayUserRateEntityMapper {
     int updateStatusOfDecimal(@Param("id") String id, @Param("deci") Integer deci);
 
 
+    @Delete(" delete from  alipay_user_rate where userId = #{userId}")
+    void delectUser(@Param("userId")String userId);
 }

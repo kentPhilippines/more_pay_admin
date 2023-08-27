@@ -2,6 +2,7 @@ package com.ruoyi.alipay.domain;
 
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,105 +15,20 @@ import java.util.Date;
  * @author kent
  * @date 2020-03-17
  */
+@Data
 public class AlipayUserFundEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private String userNode;
     private Double minAmount;
     private String idStr;
+    @Excel(name = "最大金额")
+    private Double maxAmount;
     private Integer colorIndex;
     private Integer timesTotal;
     private Integer limitBalance;
-
-    public Integer getLimitBalance() {
-        return limitBalance;
-    }
-
-    public void setLimitBalance(Integer limitBalance) {
-        this.limitBalance = limitBalance;
-    }
-
-    public Integer getTimesTotal() {
-        return timesTotal;
-    }
-
-    public void setTimesTotal(Integer timesTotal) {
-        this.timesTotal = timesTotal;
-    }
-
-    public Integer getColorIndex() {
-        return colorIndex;
-    }
-
-    public void setColorIndex(Integer colorIndex) {
-        this.colorIndex = colorIndex;
-    }
-
-
-    public String getIdStr() {
-        return idStr;
-    }
-
-    public void setIdStr(String idStr) {
-        this.idStr = idStr;
-    }
-
-    /**
-     * 最大金额
-     */
-    private Double maxAmount;
-
-    public Double getMaxAmount() {
-        return maxAmount;
-    }
-
-    public void setMaxAmount(Double maxAmount) {
-        this.maxAmount = maxAmount;
-    }
-
-    public Double getMinAmount() {
-        return minAmount;
-    }
-
-    public void setMinAmount(Double minAmount) {
-        this.minAmount = minAmount;
-    }
-
-    public String getUserNode() {
-        return this.userNode;
-    }
-
-    public void setUserNode(String userNode) {
-        this.userNode = userNode;
-    }
-
     private Integer receiveOrderState;
     private Integer remitOrderState;
     private Integer switchs;
-
-    public Integer getSwitchs() {
-        return switchs;
-    }
-
-    public void setSwitchs(Integer switchs) {
-        this.switchs = switchs;
-    }
-
-    public Integer getRemitOrderState() {
-        return remitOrderState;
-    }
-
-    public void setRemitOrderState(Integer remitOrderState) {
-        this.remitOrderState = remitOrderState;
-    }
-
-    public Integer getReceiveOrderState() {
-        return receiveOrderState;
-    }
-
-    public void setReceiveOrderState(Integer receiveOrderState) {
-        this.receiveOrderState = receiveOrderState;
-    }
-
     /**
      * 数据id
      */
@@ -157,22 +73,6 @@ public class AlipayUserFundEntity extends BaseEntity {
     private Double sumWitAmount;
     @Excel(name = "当日代付")
     private Double todayWitAmount;
-
-    public Double getTodayWitAmount() {
-        return todayWitAmount;
-    }
-
-    public void setTodayWitAmount(Double todayWitAmount) {
-        this.todayWitAmount = todayWitAmount;
-    }
-
-    public Double getSumWitAmount() {
-        return sumWitAmount;
-    }
-
-    public void setSumWitAmount(Double sumWitAmount) {
-        this.sumWitAmount = sumWitAmount;
-    }
 
     /**
      * 累计交易额
@@ -227,14 +127,6 @@ public class AlipayUserFundEntity extends BaseEntity {
     private Double todayProfit;
     private Double todayOtherWitAmount;
 
-    public Double getTodayOtherWitAmount() {
-        return todayOtherWitAmount;
-    }
-
-    public void setTodayOtherWitAmount(Double todayOtherWitAmount) {
-        this.todayOtherWitAmount = todayOtherWitAmount;
-    }
-
     /**
      * 当日接单笔数
      */
@@ -265,15 +157,6 @@ public class AlipayUserFundEntity extends BaseEntity {
     @Excel(name = "是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】")
     private String isAgent;
     private String currency;//账户货币
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
     /**
      * 最后一次数据修改时间
      */
@@ -293,210 +176,4 @@ public class AlipayUserFundEntity extends BaseEntity {
     private Long version;
 
 
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setCashBalance(Double cashBalance) {
-        this.cashBalance = cashBalance;
-    }
-
-    public Double getCashBalance() {
-        return cashBalance;
-    }
-
-    public void setRechargeNumber(Double rechargeNumber) {
-        this.rechargeNumber = rechargeNumber;
-    }
-
-    public Double getRechargeNumber() {
-        return rechargeNumber;
-    }
-
-    public void setFreezeBalance(Double freezeBalance) {
-        this.freezeBalance = freezeBalance;
-    }
-
-    public Double getFreezeBalance() {
-        return freezeBalance;
-    }
-
-    public void setAccountBalance(Double accountBalance) {
-        this.accountBalance = accountBalance;
-    }
-
-    public Double getAccountBalance() {
-        return accountBalance;
-    }
-
-    public void setSumDealAmount(Double sumDealAmount) {
-        this.sumDealAmount = sumDealAmount;
-    }
-
-    public Double getSumDealAmount() {
-        return sumDealAmount;
-    }
-
-    public void setSumRechargeAmount(Double sumRechargeAmount) {
-        this.sumRechargeAmount = sumRechargeAmount;
-    }
-
-    public Double getSumRechargeAmount() {
-        return sumRechargeAmount;
-    }
-
-    public void setSumProfit(Double sumProfit) {
-        this.sumProfit = sumProfit;
-    }
-
-    public Double getSumProfit() {
-        return sumProfit;
-    }
-
-    public void setSumAgentProfit(Double sumAgentProfit) {
-        this.sumAgentProfit = sumAgentProfit;
-    }
-
-    public Double getSumAgentProfit() {
-        return sumAgentProfit;
-    }
-
-    public void setSumOrderCount(Long sumOrderCount) {
-        this.sumOrderCount = sumOrderCount;
-    }
-
-    public Long getSumOrderCount() {
-        return sumOrderCount;
-    }
-
-    public void setTodayDealAmount(Double todayDealAmount) {
-        this.todayDealAmount = todayDealAmount;
-    }
-
-    public Double getTodayDealAmount() {
-        return todayDealAmount;
-    }
-
-    public void setTodayProfit(Double todayProfit) {
-        this.todayProfit = todayProfit;
-    }
-
-    public Double getTodayProfit() {
-        return todayProfit;
-    }
-
-    public void setTodayOrderCount(Long todayOrderCount) {
-        this.todayOrderCount = todayOrderCount;
-    }
-
-    public Long getTodayOrderCount() {
-        return todayOrderCount;
-    }
-
-    public void setTodayAgentProfit(Double todayAgentProfit) {
-        this.todayAgentProfit = todayAgentProfit;
-    }
-
-    public Double getTodayAgentProfit() {
-        return todayAgentProfit;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setAgent(String agent) {
-        this.agent = agent;
-    }
-
-    public String getAgent() {
-        return agent;
-    }
-
-    public void setIsAgent(String isAgent) {
-        this.isAgent = isAgent;
-    }
-
-    public String getIsAgent() {
-        return isAgent;
-    }
-
-    public void setSubmitTime(Date submitTime) {
-        this.submitTime = submitTime;
-    }
-
-    public Date getSubmitTime() {
-        return submitTime;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("id", getId())
-                .append("userId", getUserId())
-                .append("userName", getUserName())
-                .append("cashBalance", getCashBalance())
-                .append("rechargeNumber", getRechargeNumber())
-                .append("freezeBalance", getFreezeBalance())
-                .append("accountBalance", getAccountBalance())
-                .append("sumDealAmount", getSumDealAmount())
-                .append("sumRechargeAmount", getSumRechargeAmount())
-                .append("sumProfit", getSumProfit())
-                .append("sumAgentProfit", getSumAgentProfit())
-                .append("sumOrderCount", getSumOrderCount())
-                .append("todayDealAmount", getTodayDealAmount())
-                .append("todayProfit", getTodayProfit())
-                .append("todayOrderCount", getTodayOrderCount())
-                .append("todayAgentProfit", getTodayAgentProfit())
-                .append("userType", getUserType())
-                .append("agent", getAgent())
-                .append("isAgent", getIsAgent())
-                .append("createTime", getCreateTime())
-                .append("submitTime", getSubmitTime())
-                .append("status", getStatus())
-                .append("version", getVersion())
-                .toString();
-    }
 }

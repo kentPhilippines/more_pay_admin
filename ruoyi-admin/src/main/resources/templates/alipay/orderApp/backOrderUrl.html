@@ -27,9 +27,20 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">核销车队id：</label>
+            <label class="col-sm-3 control-label">核销：</label>
             <div class="col-sm-8">
+                <select class="form-control  " id="channelId" name="channelId">
+                    <option value="">请选择核销</option>
+                    <!--<option th:each="channel : ${channel}" th:text="${channel.userId}"
+                            th:value="${product.productId}"
+                            th:field="*{payTypr}"></option>
+-->
+                    <option th:each="user : ${channel}" th:text="'【核销账户】：'+${user.userId}+'，【核销名称】：' + ${user.userName}"
+                            th:value="${user.userId}"></option>
+                </select>
+<!--
                 <input name="channelId" class="form-control" type="text" required>
+-->
             </div>
         </div>
     </form>

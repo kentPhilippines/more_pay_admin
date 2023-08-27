@@ -213,4 +213,10 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
     public void delectUser(String userId) {
         alipayUserFundEntityMapper.delectUser(userId);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserFundEntity> findUserFundRateNew() {
+        return  alipayUserFundEntityMapper.findUserFundRateNew();
+    }
 }

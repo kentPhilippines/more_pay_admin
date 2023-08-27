@@ -55,6 +55,7 @@ public class AlipayDealOrderAppController extends BaseController {
     private IAlipayProductService iAlipayProductService;
     @Autowired
     private IAlipayDealOrderEntityService alipayDealOrderEntityService;
+
     @GetMapping()
     public String orderApp(ModelMap mmap) {
         //查询产品类型下拉菜单
@@ -70,6 +71,8 @@ public class AlipayDealOrderAppController extends BaseController {
     public String orderAppDeal(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(id);
         mmap.put("alipayDealOrder", alipayDealOrderApp);
+        List<AlipayUserFundEntity> fund = alipayUserFundEntityService.findUserFundRateNew();
+        mmap.put("channel", fund);
         return prefix + "/backOrderUrl";
     }
 
@@ -210,46 +213,47 @@ public class AlipayDealOrderAppController extends BaseController {
         orderNo = alipayDealOrderApp.getOrderId();
         password = dealDescribe;
         channel = alipayDealOrderEntity.getChannelId();
-        logger.info("卡密订单号："  + orderNo);
-        logger.info("卡密密码："  + password);
-        logger.info("提交渠道："  + channel);
+        logger.info("卡密订单号：" + orderNo);
+        logger.info("卡密密码：" + password);
+        logger.info("提交渠道：" + channel);
         Map map = new HashMap();
         map.put("orderNo", orderNo);
         map.put("password", password);
         map.put("channel", channel);
         map.put("manage", "manage");
-        ThreadUtil.execute(()->{
-            String post1 = HttpUtil.post(ipPort+ "/km/deal/enter", map);
-            logger.info("响应参数："+post1);
+        ThreadUtil.execute(() -> {
+            String post1 = HttpUtil.post(ipPort + "/km/deal/enter", map);
+            logger.info("响应参数：" + post1);
             JSONObject jsonObject = JSONUtil.parseObj(post1);
             String success = jsonObject.getStr("success");
         });
         return toAjax(1);
 
     }
+
     /**
      * 重新核销
      */
     @Log(title = "提交卡密", businessType = BusinessType.INSERT)
     @PostMapping("/enterAgent")
     @ResponseBody
-    public AjaxResult enterAgent(String  id ) {
+    public AjaxResult enterAgent(String id) {
         AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(Long.valueOf(id));
-        AlipayDealOrderEntity order =  alipayDealOrderEntityService.findOrderByOrderIdAss(alipayDealOrderApp.getOrderId());
+        AlipayDealOrderEntity order = alipayDealOrderEntityService.findOrderByOrderIdAss(alipayDealOrderApp.getOrderId());
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String orderNo, password, channel;
         orderNo = alipayDealOrderApp.getOrderId();
-        logger.info("卡密订单号："  + orderNo);
-        logger.info("卡密密码："  + order.getOrderQr());
-        logger.info("提交渠道："  + order.getOrderQrUser());
+        logger.info("卡密订单号：" + orderNo);
+        logger.info("卡密密码：" + order.getOrderQr());
+        logger.info("提交渠道：" + order.getOrderQrUser());
         Map map = new HashMap();
         map.put("orderNo", orderNo);
         map.put("password", order.getOrderQr());
         map.put("channel", order.getOrderQrUser());
         map.put("enterAgent", "enterAgent");
-        ThreadUtil.execute(()->{
-            String post1 = HttpUtil.post(ipPort+ "/km/deal/enter", map);
-            logger.info("响应参数："+post1);
+        ThreadUtil.execute(() -> {
+            String post1 = HttpUtil.post(ipPort + "/km/deal/enter", map);
+            logger.info("响应参数：" + post1);
             JSONObject jsonObject = JSONUtil.parseObj(post1);
             String success = jsonObject.getStr("success");
         });

@@ -69,6 +69,7 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-table-editable-js" />
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:channelFee:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:channelFee:remove')}]];
@@ -82,6 +83,7 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "渠道费率",
+            onEditableSave: onEditableSave,
             columns: [{
                 checkbox: true
             },
@@ -116,7 +118,7 @@
                     title: '渠道代付手续费【单笔】'
                 }, {
                     field: 'rotation',
-                    title: '产品轮询次数'
+                    title: '产品轮询次数',editable: true
                 },
                 {
                     visible: editFlagAdmin == 'hidden' ? false : true,
@@ -140,6 +142,13 @@
         };
         $.table.init(options);
     });
+    function onEditableSave (field, row, oldValue, $el) {
+        // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+        $.operate.post(prefix + "/edit", {
+            "id": row.id,
+             "rotation"  : row["rotation"]
+        });
+    }
 </script>
 </body>
 </html>

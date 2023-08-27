@@ -147,4 +147,11 @@ public interface AlipayUserFundEntityMapper {
     @Delete("delete from alipay_user_fund where userId  = #{userId} ")
     void delectUser(@Param("userId") String userId);
 
+
+    @Select("select uf.* from alipay_user_fund uf  left join " +
+            " alipay_user_info  ui on  uf.userId = ui.userId  where uf.userType = 3 and uf.status = 1 and ui.receiveOrderState = 1  ")
+    List<AlipayUserFundEntity> findUserFundRateNew();
+
+
+
 }

@@ -266,7 +266,7 @@
             <if test="appOrderId != null  and appOrderId != ''">and doa.appOrderId = #{appOrderId}</if>
             <if test="retain1 != null  and retain1 != ''">and doa.retain1 = #{retain1}</if>
             <if test="channelId != null  and channelId != ''">and do.orderQrUser = #{channelId}</if>
-            <if test="orderQr != null  and orderQr != ''">and do.orderQr =  like concat('%', #{orderQr} , '%')</if>
+            <if test="orderQr != null  and orderQr != ''">and do.orderQr   like concat('%', #{orderQr} , '%')</if>
             <if test="channelTime != null  and channelTime != ''">and TO_DAYS(do.createTime) =  TO_DAYS(channelTime)</if>
             <if test="channelOrderId != null  and channelOrderId != ''">and do.orderId = #{channelOrderId}</if>
         </where>

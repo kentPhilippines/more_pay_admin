@@ -53,6 +53,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: bootstrap-table-editable-js" />
 <script th:inline="javascript">
     var refundFlag = [[${@permission.hasPermi('fund:refund:add')}]];
     var deductFlag = [[${@permission.hasPermi('fund:refund:deduct')}]];
@@ -71,6 +72,7 @@
             openUrl: prefix1 + "/refund/{userId}",//渠道加款
             exportUrl: prefix + "/export",
             modalName: "渠道资金账户",
+            onEditableSave: onEditableSave,
             columns: [{
                 checkbox: true
             },
@@ -78,7 +80,7 @@
                 {field: 'userId', title: '渠道账户 '},
                 {field: 'userName', title: '账户名称 '},
                 {field: 'accountBalance', title: '可取现金额 '},
-                {field: 'limitBalance', title: '余额上限 '},
+                {field: 'limitBalance', title: '余额上限 ',editable: true},
                 {field: 'timesTotal', title: '核销账户数【卡密渠道专用字段】 '},
                 {field: 'createTime', title: '创建时间'},
                /* {
@@ -188,7 +190,13 @@
             });
         })
     }
-
+    function onEditableSave (field, row, oldValue, $el) {
+       // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+        $.operate.post(prefix + "/edit", {
+            "id": row.id,
+            "limitBalance" : row["limitBalance"]
+        });
+    }
     /* 此渠道的管理-启用 */
     function enable(userId, param, msg, val) {
         $.modal.confirm(msg, function () {

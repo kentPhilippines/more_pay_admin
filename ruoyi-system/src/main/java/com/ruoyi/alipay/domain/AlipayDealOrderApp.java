@@ -28,6 +28,8 @@ public class AlipayDealOrderApp extends BaseEntity {
     private String channelOrderStatus;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date channelTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date channelSubmitTime;
 
 
     private String userName;

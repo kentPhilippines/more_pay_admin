@@ -17,6 +17,8 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.RSAUtil;
 import com.ruoyi.common.utils.RSAUtils;
+import io.reactivex.internal.operators.observable.ObservableAny;
+import org.apache.ibatis.type.YearTypeHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,6 +88,11 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     @Transactional(rollbackFor = Exception.class)
     public int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity) throws Exception {
+
+        AlipayUserInfo backUserByUserId = merchantInfoEntityMapper.findBackUserByUserId(merchantInfoEntity.getUserId());
+        if (!Objects.isNull(backUserByUserId)) {
+            throw new BusinessException("商户号重复");
+        }
         String[] strings = RSAUtil.generateRSAKeyPair();
         if (strings == null) {
             throw new BusinessException("获取密钥对错误，操作失败");

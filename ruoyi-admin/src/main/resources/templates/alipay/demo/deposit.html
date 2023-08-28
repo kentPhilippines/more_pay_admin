@@ -184,8 +184,10 @@
             success: function (data) {
                 $("#content").text(JSON.stringify(data));
                 console.log(JSON.stringify(data));
+                data =  JSON.parse(data);
                 if (data.success) {
                     window.location.href = data.result.returnUrl
+                    console.log(data.result.returnUrl);
                 }
 
 

@@ -9,6 +9,7 @@ import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.annotation.RepeatSubmit;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -153,6 +154,7 @@ public class MerchantInfoEntityController extends BaseController {
     @Log(title = "商户信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
+    @RepeatSubmit
     public AjaxResult addSave(AlipayUserInfo merchantInfoEntity) throws Exception {
         int i = merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity);
         int n = saveSysUser(merchantInfoEntity);

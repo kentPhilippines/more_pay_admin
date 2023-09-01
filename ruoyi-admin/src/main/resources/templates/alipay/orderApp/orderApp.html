@@ -107,14 +107,12 @@
     const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
     const backOrderFlag = [[${@permission.hasPermi('orderDeal:qr:backOrder')}]];
     const prefix = ctx + "alipay/orderApp";
-    const prefixDeal = ctx + "alipay/orderDeal";
-    const prefix11 = ctx + "alipay/order";
     $(function () {
         var options = {
             url: prefix + "/listorderDeal",
             detailUrl: prefix + "/edit/{id}",
             statisticsUrl: prefix + "/statistics/merchant/table",
-            statisticsUrlDeal: prefixDeal + "/statistics/qr/table",
+            statisticsUrlDeal: ctx + "alipay/orderDeal" + "/statistics/qr/table",
             exportUrl: prefix + "/export",
             backOrderUrl: prefix + "/backOrderUrl/{id}",
             modalName: "商户交易订单",
@@ -166,7 +164,10 @@
                         }else  if(null != row.channelOrderStatus && 4 == row.channelOrderStatus){
                             table += '<li>' + '<span class="badge badge-warning">核销失败</span>' + '</li>'
                         }
-                        if( 1 == value  && null == row.channelOrderStatus){
+                        if( 1 == row.orderStatus  && null == row.channelOrderStatus){
+                            table += $.table.selectDictLabel(orderstatusDatas, value);
+                        }
+                        if( 2 == row.orderStatus   && null == row.channelOrderStatus){
                             table += $.table.selectDictLabel(orderstatusDatas, value);
                         }
                         if (null != row.orderQr) {
@@ -229,7 +230,6 @@
                             table += '<li>' + '核销时间：' + row.channelSubmitTime + '</li>'
                             table += '<li>' + '结算时间：' + total + '</li>'
                         }
-
                         table += '</ul>'
                         return table;
                     }
@@ -242,40 +242,19 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        /*
-                                                actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
-                        */
-                        /*   if (day < 7) {
-                               actions.push('<a class="btn btn-primary btn-xs ' + backOrderFlag + '" onclick="$.operate.openAccount(\'' + row.id + '\',\'补单\',\'backOrderUrl\')"><i class="fa fa-plus"></i>补单</a> ');
-                           }*/
                         if (row.orderStatus != 2) {
                             actions.push('<a class="btn btn-primary btn-xs ' + backOrderFlag + '" onclick="$.operate.openAccount(\'' + row.id + '\',\'核销卡密\',\'backOrderUrl\')"><i class="fa fa-plus"></i>核销卡密</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs  " href="javascript:void(0)" onclick="onEnterOrder(\'' + row.id + '\',\'' + "SU" + '\' )"><i class="fa fa-google-wallet"></i>置为成功</a> ');
                         }
-
-                        /*
-                                                actions.push('<a class="btn btn-danger btn-xs ' + updateOrder + '" href="javascript:void(0)" onclick="onUpdateOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>核销卡密</a> ');
-                        */
-                        /*      if (row.orderStatus != 2 && row.orderStatus != 3) {
-                               if (day < 7) {
-
-                                                                   actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
-
-                                actions.push('<a class="btn btn-danger btn-xs  " href="javascript:void(0)" onclick="onEnterOrder(\'' + row.id + '\',\'' + "SU" + '\' )"><i class="fa fa-google-wallet"></i>置为成功</a> ');
-                            }
-                        }        */
-
+                        if(row.orderStatus == 2  ){
+                            actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="renotify(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>重新通知</a> ');
+                        }
                         return actions.join('');
                     }
                 }]
         };
         $.table.init(options);
     });
-
-    function onUpdateOrder(id) {
-        $.modal.confirm("该笔订单确认转为人工处理", function () {
-            $.operate.post(prefix + "/updataOrder", {"id": id});
-        });
-    }
 
 
     //初始化时间
@@ -299,8 +278,15 @@
 
     function onEnterOrder(id, orderStatus) {
         $.modal.confirm("确认修改订单？", function () {
-            $.operate.post(prefix11 + "/updataOrder", {"id": id, "orderStatus": orderStatus});
+            $.operate.post(prefix + "/updataOrder", {"id": id, "orderStatus": orderStatus});
         })
+    }
+
+    //重新通知
+    function renotify(orderId) {
+        $.modal.confirm("确认重新通知此订单的商户", function () {
+            $.operate.post(prefix + "/renotify", {"orderId": orderId});
+        });
     }
 </script>
 </body>

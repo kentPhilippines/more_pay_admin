@@ -35,7 +35,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
+     <!--   <div class="form-group">
             <label class="col-sm-3 control-label is-required">费率类型：</label>
             <div class="col-sm-8">
                 <select id="feeType" name="feeType" class="form-control m-b" th:with="type=${@dict.getType('feeType')}"
@@ -45,7 +45,7 @@
                             th:field="*{feeType}"></option>
                 </select>
             </div>
-        </div>
+        </div>-->
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">费率：</label>
             <div class="col-sm-8">
@@ -68,7 +68,7 @@
                 <input class="form-control" min="0.00" name="retain2" required th:field="*{retain2}" type="number">
             </div>
         </div>-->
-        <div class="form-group">
+       <!-- <div class="form-group">
             <label class="col-sm-3 control-label is-required">额外抽点：</label>
             <div class="col-sm-8">
                 <input class="form-control" min="0.00" name="retain3" required th:field="*{retain3}"  >
@@ -82,7 +82,8 @@
                     <table id="bootstrap-table"></table>
                 </div>
             </div>
-        </div>
+        </div>-->
+
     </form>
 </div>
 <th:block th:include="include :: footer"/>
@@ -112,72 +113,7 @@
     $(function (){
         query();
     })
-    function query() {
-        var options = {
-            url: prefixFee + "/listFee1?id=" + $("#id").val(),
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            pagination: false,
-            columns: [{
-                checkbox: true,
-                formatter: function(value, row, index) {
-                    if(row.checked){
-                        return {
-                            checked: true
-                        }
-                    }
-                }
-            },
-                {
-                    field: 'channelId',
-                    title: '渠道'
-                },
-                {
-                    field: 'priority',
-                    title: '优先级[若不修改默认为1]',
-                    editable: {
-                        type: 'select',
-                        title: '优先级',
-                        source: [
-                            {
-                                value: 1,
-                                text: "优先级1"
-                            }, {
-                                value: 2,
-                                text: "优先级2"
-                            }, {
-                                value: 3,
-                                text: "优先级3"
-                            }, {
-                                value: 4,
-                                text: "优先级4"
-                            }, {
-                                value: 5,
-                                text: "优先级5"
-                            }, {
-                                value: 6,
-                                text: "优先级6"
-                            }, {
-                                value: 7,
-                                text: "优先级7"
-                            }
-                        ]
-                    }
-                }
-            ]
-        };
-        $.table.init(options);
-    }
-
-
-
     /* 查询表格选择行数据值 */
-    function getSelections(){
-        var data = $("#" + table.options.id).bootstrapTable('getSelections');
-        $("input[name='channelId']").val(JSON.stringify(data))
-    }
 
 
 

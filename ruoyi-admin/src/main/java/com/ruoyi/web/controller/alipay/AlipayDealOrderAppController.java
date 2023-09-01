@@ -3,9 +3,11 @@ package com.ruoyi.web.controller.alipay;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
@@ -22,14 +24,19 @@ import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -260,5 +267,49 @@ public class AlipayDealOrderAppController extends BaseController {
         return toAjax(1);
 
     }
+
+    @PostMapping("/updataOrder")
+    @ResponseBody
+    @Log(title = "交易订单", businessType = BusinessType.UPDATE)
+    public AjaxResult enterOrder(Long id, String orderStatus) {
+        AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(id);
+        /**
+         * <p>当前订单为成功或者失败的时候禁止修改状态</p>
+         */
+        if (StrUtil.isBlank(orderStatus)) {
+            return AjaxResult.error("订单状态出错");
+        }
+        String status = alipayDealOrderApp.getOrderStatus();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符") String userName = currentUser.getUserName();
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        if ("2".equals(status) || "4".equals(status)) {
+            return AjaxResult.error("当前订单状态不允许修改");
+        }
+        mapParam.put("orderId", alipayDealOrderApp.getOrderId());
+        mapParam.put("userName", userName);
+        if ("SU".equals(orderStatus)) {
+            mapParam.put("orderStatus", "2");
+        }  else {
+            return AjaxResult.error("状态错误");
+        }
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        AjaxResult post = post(ipPort + "/order-app-api/enter-orderQr/", mapParam);
+        return post;
+    }
+
+    @Log(title = "交易订单", businessType = BusinessType.UPDATE)
+    @PostMapping("/renotify")
+    @ResponseBody
+    public AjaxResult renotify(AlipayDealOrderEntity alipayDealOrderEntity) {
+        //调用通知方法
+        //获取alipay处理接口URL
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_8);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        mapParam.put("orderId", alipayDealOrderEntity.getOrderId());
+        return HttpUtils.adminGet2Gateway(mapParam, ipPort + "/notfiy-api/notfiy-agent-app");
+    }
+
 
 }

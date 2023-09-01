@@ -67,7 +67,7 @@
                 <input name="fee" class="form-control" type="number" min="0.00" placeholder="请输入商户费率" required>
             </div>
         </div>
-        <div class="form-group">
+       <!-- <div class="form-group">
             <label class="col-sm-3 control-label is-required">渠道选择：</label>
             <div class="row">
                 <input name="channelId" id = "channelId" class="form-control" type="hidden">
@@ -75,7 +75,7 @@
                     <table id="bootstrap-table"></table>
                 </div>
             </div>
-        </div>
+        </div>-->
 
 
     </form>
@@ -92,12 +92,12 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-            getSelections();
+           // getSelections();
             $.operate.save(prefix + "/add", $('#form-rate-add').serialize());
         }
     }
 
-    function query(payType) {
+  /*  function query(payType) {
         var options = {
             url: prefixFee + "/listFee?productId=" + payType,
             showSearch: false,
@@ -163,18 +163,18 @@
             ]
         };
         $.table.init(options);
-    }
+    }*/
 
-    $("#payTypr").change(function () {
+ /*   $("#payTypr").change(function () {
         var payType = $(this).val();
         query(payType);
     })
-
-    /* 查询表格选择行数据值 */
+*/
+ /*   /!* 查询表格选择行数据值 *!/
     function getSelections(){
         var data = $("#" + table.options.id).bootstrapTable('getSelections');
         $("input[name='channelId']").val(JSON.stringify(data))
-    }
+    }*/
 </script>
 </body>
 </html>

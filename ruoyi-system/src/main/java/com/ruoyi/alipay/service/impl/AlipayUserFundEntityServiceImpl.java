@@ -89,6 +89,7 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
     @Resource
     private AlipayUserInfoMapper alipayUserInfoMapper;
 
+
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity) {

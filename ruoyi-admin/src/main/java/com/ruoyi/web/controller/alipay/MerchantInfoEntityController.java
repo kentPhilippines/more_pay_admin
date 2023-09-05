@@ -10,6 +10,7 @@ import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.annotation.RepeatSubmit;
+import com.ruoyi.common.config.datasource.DynamicDataSourceContextHolder;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -29,6 +30,8 @@ import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.web.controller.tool.RandomValue;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -51,6 +54,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/alipay/merchant")
 public class MerchantInfoEntityController extends BaseController {
+    public static final Logger log = LoggerFactory.getLogger(DynamicDataSourceContextHolder.class);
     private String prefix = "alipay/merchant/info";
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
@@ -363,12 +367,14 @@ public class MerchantInfoEntityController extends BaseController {
         }
         return error();
     }
+
     @Autowired
     private IAlipayUserRateEntityService alipayUserRateEntityService;
     @Autowired
     private IAlipayUserInfoService alipayUserInfoService;
     @Autowired
     private IAlipayUserFundEntityService alipayUserFundEntityService;
+
     /**
      * 删除用户详情(调用api)
      */
@@ -380,7 +386,13 @@ public class MerchantInfoEntityController extends BaseController {
         alipayUserInfoService.deleteAlipayUserInfoByIds(ids);
         alipayUserFundEntityService.delectUser(userInfo.getUserId());
         alipayUserRateEntityService.delectUser(userInfo.getUserId());
-        return toAjax(1 );
+        try {
+            SysUser user =userService.selectUserByLoginName(userInfo.getUserId());
+            userService.deleteUserByIds(String.valueOf(user.getUserId()), null);
+        } catch (Exception e) {
+            log.error("删除系统用户失败;userId:{}",userInfo.getUserId());
+        }
+        return toAjax(1);
 
     }
 }

@@ -16,6 +16,7 @@ import com.ruoyi.alipay.service.IAlipayDealOrderAppService;
 import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
 import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
+import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -23,12 +24,14 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,10 +39,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -213,6 +213,8 @@ public class AlipayDealOrderAppController extends BaseController {
     @PostMapping("/backOrderSave")
     @ResponseBody
     public AjaxResult backOrderSave(AlipayDealOrderApp alipayDealOrderEntity) {
+        //加入操作信息
+        updateSubmitInfo(alipayDealOrderEntity.getId());
         AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(alipayDealOrderEntity.getId());
         String dealDescribe = alipayDealOrderEntity.getDealDescribe().trim();
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
@@ -245,6 +247,8 @@ public class AlipayDealOrderAppController extends BaseController {
     @PostMapping("/enterAgent")
     @ResponseBody
     public AjaxResult enterAgent(String id) {
+        //加入操作信息
+        updateSubmitInfo(Long.valueOf(id));
         AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(Long.valueOf(id));
         AlipayDealOrderEntity order = alipayDealOrderEntityService.findOrderByOrderIdAss(alipayDealOrderApp.getOrderId());
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
@@ -272,6 +276,8 @@ public class AlipayDealOrderAppController extends BaseController {
     @ResponseBody
     @Log(title = "交易订单", businessType = BusinessType.UPDATE)
     public AjaxResult enterOrder(Long id, String orderStatus) {
+        //加入操作信息
+        updateSubmitInfo(id);
         AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(id);
         /**
          * <p>当前订单为成功或者失败的时候禁止修改状态</p>
@@ -290,7 +296,7 @@ public class AlipayDealOrderAppController extends BaseController {
         mapParam.put("userName", userName);
         if ("SU".equals(orderStatus)) {
             mapParam.put("orderStatus", "2");
-        }  else {
+        } else {
             return AjaxResult.error("状态错误");
         }
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
@@ -302,6 +308,8 @@ public class AlipayDealOrderAppController extends BaseController {
     @PostMapping("/renotify")
     @ResponseBody
     public AjaxResult renotify(AlipayDealOrderEntity alipayDealOrderEntity) {
+        //加入操作信息
+        updateSubmitInfoByOrderId(alipayDealOrderEntity.getOrderId());
         //调用通知方法
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
@@ -311,5 +319,17 @@ public class AlipayDealOrderAppController extends BaseController {
         return HttpUtils.adminGet2Gateway(mapParam, ipPort + "/notfiy-api/notfiy-agent-app");
     }
 
+
+    public void updateSubmitInfoByOrderId(String orderId) {
+        AlipayDealOrderApp order = new AlipayDealOrderApp();
+        order.setOrderId(orderId);
+        AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderApp(order);
+        updateSubmitInfo(alipayDealOrderApp.getId());
+    }
+
+    public void updateSubmitInfo(Long id) {
+        String userName = ShiroUtils.getSysUser().getUserName();
+        alipayDealOrderAppService.updateSubmitInfo(id, userName);
+    }
 
 }

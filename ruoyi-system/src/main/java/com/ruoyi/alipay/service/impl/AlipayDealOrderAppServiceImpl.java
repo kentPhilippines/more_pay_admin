@@ -11,6 +11,7 @@ import com.ruoyi.common.enums.DataSourceType;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -126,5 +127,18 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
         return alipayDealOrderAppMapper.selectAlipayDealOrderAppListDealOrder(alipayDealOrderApp);
     }
 
-
+    /**
+     * @return void
+     * @Description 修改操作信息（操作时间与，操作人）
+     * @Param []
+     **/
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void updateSubmitInfo(Long id,String submitUser) {
+        AlipayDealOrderApp order = new AlipayDealOrderApp();
+        order.setId(id);
+        order.setSubmitTime(new Date());
+        order.setSubmitUser(submitUser);
+        alipayDealOrderAppMapper.updateAlipayDealOrderApp(order);
+    }
 }

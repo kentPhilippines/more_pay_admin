@@ -16,6 +16,7 @@ import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -127,4 +128,16 @@ public class AipayChannelContorller extends BaseController {
         throw new BusinessException("操作失败，修改失败");
     }
 
+    /**
+     * 删除渠道
+     */
+
+    @RequiresPermissions("alipay:channel:remove")
+    @Log(title = "渠道", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        alipayUserFundEntityService.delete(Long.valueOf(ids));
+        return toAjax( 1);
+    }
 }

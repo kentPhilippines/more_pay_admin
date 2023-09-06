@@ -68,6 +68,7 @@
                doa.notify,
                doa.back,
                doa.submitTime,
+               doa.submitUser,
                doa.createTime,
                doa.status,
                doa.retain1,
@@ -228,6 +229,7 @@
             <if test="notify != null  and notify != ''">notify = #{notify},</if>
             <if test="back != null  and back != ''">back = #{back},</if>
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
+            <if test="submitUser != null ">submitUser = #{submitUser},</if>
             <if test="createTime != null ">createTime = #{createTime},</if>
             <if test="status != null ">status = #{status},</if>
             <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>

@@ -115,4 +115,7 @@ public class AlipayDealOrderApp extends BaseEntity {
      */
     @Excel(name = "实际金额")
     private Double actualAmount;
+
+    @Excel(name = "数据修改人")
+    private String submitUser;
 }

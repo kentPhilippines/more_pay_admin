@@ -234,6 +234,24 @@
                         return table;
                     }
                 },
+                {
+                    field: 'orderId', title: '操作信息', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        if (null == row.submitTime) {
+                            table += '<li>' + '操作时间：--</li>'
+                        } else {
+                            table += '<li>' + '操作时间：' + row.submitTime + '</li>'
+                        }
+                        if (null == row.submitUser) {
+                            table += '<li>' + '操作人：--</li>'
+                        } else {
+                            table += '<li>' + '操作人：' + row.submitUser + '</li>'
+                        }
+                        table += '</ul>'
+                        return table;
+                    }
+                },
+
                 /*
                                 {field: 'dealDescribe', title: '交易备注'},
                 */

@@ -36,7 +36,6 @@ public interface IAlipayDealOrderAppService {
      */
     int updateAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
 
-
     List<AlipayDealOrderApp> selectSubMembersOrderList(List<String> list, AlipayDealOrderApp alipayDealOrderApp);
 
     /**
@@ -88,5 +87,6 @@ public interface IAlipayDealOrderAppService {
 
     List<AlipayDealOrderApp> selectAlipayDealOrderAppListDealOrder(AlipayDealOrderApp alipayDealOrderApp);
 
+     void updateSubmitInfo(Long id,String submitUser);
 
 }

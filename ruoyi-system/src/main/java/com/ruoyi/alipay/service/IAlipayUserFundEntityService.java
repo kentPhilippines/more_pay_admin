@@ -158,6 +158,8 @@ public interface IAlipayUserFundEntityService {
 
     void delectUser(String userId);
 
+    void delete(Long id);
+
     List<AlipayUserFundEntity> findUserFundRateNew();
 
 

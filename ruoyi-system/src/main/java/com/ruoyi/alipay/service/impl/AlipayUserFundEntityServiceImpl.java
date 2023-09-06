@@ -2,17 +2,22 @@ package com.ruoyi.alipay.service.impl;
 
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.domain.AlipayUserRateEntity;
 import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
 import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
+import com.ruoyi.alipay.mapper.AlipayUserRateEntityMapper;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
+import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
+import jdk.nashorn.internal.runtime.options.Options;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 用户资金账户Service业务层处理
@@ -24,6 +29,10 @@ import java.util.List;
 public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntityService {
     @Resource
     private AlipayUserFundEntityMapper alipayUserFundEntityMapper;
+    @Resource
+    private AlipayUserInfoMapper alipayUserInfoMapper;
+    @Resource
+    private AlipayUserRateEntityMapper alipayUserRateEntityMapper;
 
     /**
      * 查询用户资金账户
@@ -86,10 +95,6 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
         return alipayUserFundEntityMapper.selectAlipayUserFundByUserId(merchantId);
     }
 
-    @Resource
-    private AlipayUserInfoMapper alipayUserInfoMapper;
-
-
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity) {
@@ -103,6 +108,9 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
             channel.setMinAmount(userInfo.getMinAmount());
             channel.setTimesTotal(userInfo.getTimesTotal());
             channel.setLimitBalance(userInfo.getLimitBalance());
+            AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityMapper.findDealRate(userInfo.getUserId());
+            Double fee = Objects.isNull(alipayUserRateEntity) ? 0.00 : alipayUserRateEntity.getFee();
+            channel.setRate(fee);
         }
         return channelAccount;
     }
@@ -217,7 +225,13 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void delete(Long id) {
+        alipayUserFundEntityMapper.delete(id);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserFundEntity> findUserFundRateNew() {
-        return  alipayUserFundEntityMapper.findUserFundRateNew();
+        return alipayUserFundEntityMapper.findUserFundRateNew();
     }
 }

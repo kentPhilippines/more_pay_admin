@@ -6,6 +6,7 @@ import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
+import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -44,6 +45,7 @@ public class AipayChannelContorller extends BaseController {
     @Autowired private DictionaryUtils dictionaryUtils;
     @Autowired private IAlipayAmountEntityService alipayAmountEntityService;
     @Autowired private SysPasswordService passwordService;
+    @Autowired private IAlipayUserRateEntityService alipayUserRateEntityService;
     /**
      * 查询用户资金账户列表
      */
@@ -137,7 +139,11 @@ public class AipayChannelContorller extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        AlipayUserFundEntity alipayUserFundEntity=  alipayUserFundEntityService.selectAlipayUserFundEntityById(Long.valueOf(ids));
         alipayUserFundEntityService.delete(Long.valueOf(ids));
+        AlipayUserInfo alipayUserInfo= alipayUserInfoService.findMerchantInfoByUserId(alipayUserFundEntity.getUserId());
+        alipayUserInfoService.deleteAlipayUserInfoByIds(String.valueOf(alipayUserInfo.getId()));
+        alipayUserRateEntityService.delectUser(alipayUserInfo.getUserId());
         return toAjax( 1);
     }
 }

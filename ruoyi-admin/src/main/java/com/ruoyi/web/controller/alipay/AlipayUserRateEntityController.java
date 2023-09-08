@@ -289,17 +289,17 @@ public class AlipayUserRateEntityController extends BaseController {
         //1，查看当前修改完的费率是否有配置渠道费率,并检查是否有重复配置的情况
         //2，查看当前修完费率是否有配置代理商费率
         //3，如以上不存在问题，则保存当前修改完费率，且对相同产品类型的费率进行关闭
-        alipayUserRateEntityService.clickFee(alipayUserRateEntity);
-        alipayUserRateEntityService.isAgentFee(alipayUserRateEntity);
-        JSONArray objects = JSONUtil.parseArray(alipayUserRateEntity.getChannelId());
-         for (Object mf : objects) {
-            JSONObject jsonObject = JSONUtil.parseObj(mf);
-            McFee mcFee = jsonObject.toBean(McFee.class);
-             AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy( mcFee.getChannelId(), alipayUserRateEntity.getPayTypr());
-             if (ObjectUtil.isNull(channel)) {
-                 return error("当前渠道未接通，请联系技术人员对接");
-             }
-         }
+//        alipayUserRateEntityService.clickFee(alipayUserRateEntity);
+//        alipayUserRateEntityService.isAgentFee(alipayUserRateEntity);
+//        JSONArray objects = JSONUtil.parseArray(alipayUserRateEntity.getChannelId());
+//         for (Object mf : objects) {
+//            JSONObject jsonObject = JSONUtil.parseObj(mf);
+//            McFee mcFee = jsonObject.toBean(McFee.class);
+//             AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy( mcFee.getChannelId(), alipayUserRateEntity.getPayTypr());
+//             if (ObjectUtil.isNull(channel)) {
+//                 return error("当前渠道未接通，请联系技术人员对接");
+//             }
+//         }
         return toAjax(alipayUserRateEntityService.updateAlipayUserRateEntity(alipayUserRateEntity));
     }
 }

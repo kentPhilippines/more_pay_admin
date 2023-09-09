@@ -109,7 +109,7 @@
                     visible: editFlagAdmin == 'hidden' ? false : true,
 
                     field: 'channelRFee',
-                    title: '渠道入款费率【精确到千位】'
+                    title: '渠道入款费率【精确到千位】',editable: true
                 },
                 {
                     visible: editFlagAdmin == 'hidden' ? false : true,
@@ -146,7 +146,8 @@
         // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
         $.operate.post(prefix + "/edit", {
             "id": row.id,
-             "rotation"  : row["rotation"]
+             "rotation"  : row["rotation"],
+             "channelRFee"  : row["channelRFee"]
         });
     }
 </script>

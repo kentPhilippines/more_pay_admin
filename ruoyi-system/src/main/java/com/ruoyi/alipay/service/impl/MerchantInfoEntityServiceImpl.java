@@ -19,6 +19,9 @@ import com.ruoyi.common.utils.RSAUtil;
 import com.ruoyi.common.utils.RSAUtils;
 import io.reactivex.internal.operators.observable.ObservableAny;
 import org.apache.ibatis.type.YearTypeHandler;
+import org.apache.shiro.authc.credential.PasswordService;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,9 +101,10 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
             throw new BusinessException("获取密钥对错误，操作失败");
         }
         String salt = HashKit.randomSalt();
-        String md5 = HashKit.encodePassword(merchantInfoEntity.getLoginName(), merchantInfoEntity.getPassword(), salt);//登陆密码
+        String md5 =   new Md5Hash(merchantInfoEntity.getUserId()+ merchantInfoEntity.getPassword()+ salt).toHex();//登陆密码
         String dealKey = UUID.randomUUID().toString().replace("-", "").toUpperCase();
         merchantInfoEntity.setPassword(md5);
+        merchantInfoEntity.setSalt(salt);
         merchantInfoEntity.setSalt(salt);
         merchantInfoEntity.setPayPasword(md5);
         merchantInfoEntity.setUserType(1);

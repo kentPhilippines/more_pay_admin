@@ -86,9 +86,6 @@
         <include refid="selectAlipayUserFundEntityVo"/>
         <where>
           1=1
-            <if test="params.dayStart != null and params.dayEnd != ''  ">
-                and createTime between #{params.dayStart} and #{params.dayEnd}
-            </if>
             <if test="userId != null  and userId != ''">and userId = #{userId}</if>
             <if test="userName != null  and userName != ''">and userName like concat('%', #{userName}, '%')</if>
             <if test="cashBalance != null ">and cashBalance = #{cashBalance}</if>

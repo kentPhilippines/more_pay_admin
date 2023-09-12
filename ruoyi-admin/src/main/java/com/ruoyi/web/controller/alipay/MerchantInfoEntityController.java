@@ -176,9 +176,9 @@ public class MerchantInfoEntityController extends BaseController {
      */
     private int saveSysUser(AlipayUserInfo merchantInfoEntity) {
         SysUser user = new SysUser();
-        user.setSalt(ShiroUtils.randomSalt());
-        user.setPassword(passwordService.encryptPassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPassword(), user.getSalt()));
-        user.setFundPassword(passwordService.encryptPassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPassword(), user.getSalt()));
+        user.setSalt(merchantInfoEntity.getSalt());
+        user.setPassword(merchantInfoEntity.getPassword());
+        user.setFundPassword(merchantInfoEntity.getPassword());
         user.setCreateBy(ShiroUtils.getLoginName());
         user.setMerchantId(merchantInfoEntity.getUserId());
         user.setRemark(merchantInfoEntity.getIpStr() + "&0");

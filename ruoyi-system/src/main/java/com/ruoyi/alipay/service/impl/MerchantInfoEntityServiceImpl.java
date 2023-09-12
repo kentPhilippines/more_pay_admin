@@ -98,7 +98,7 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
             throw new BusinessException("获取密钥对错误，操作失败");
         }
         String salt = HashKit.randomSalt();
-        String md5 = HashKit.encodePassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPassword(), salt);//登陆密码
+        String md5 = HashKit.encodePassword(merchantInfoEntity.getLoginName(), merchantInfoEntity.getPassword(), salt);//登陆密码
         String dealKey = UUID.randomUUID().toString().replace("-", "").toUpperCase();
         merchantInfoEntity.setPassword(md5);
         merchantInfoEntity.setSalt(salt);

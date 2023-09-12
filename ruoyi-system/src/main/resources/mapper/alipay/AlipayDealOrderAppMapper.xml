@@ -81,6 +81,7 @@
                do.orderQr as orderQr,
                do.createTime as channelTime ,
                do.submitTime as channelSubmitTime ,
+               do.isNotify as isNotify ,
                do.orderId as channelOrderId
         from alipay_deal_order_app  doa      LEFT JOIN alipay_deal_order do ON   doa.orderId = do.associatedId
     </sql>
@@ -262,8 +263,8 @@
             <if test="orderType != null ">and doa.orderType = #{orderType}</if>
             <if test="orderId != null and orderId != ''">and doa.orderId = #{orderId}</if>
             <if test="orderAccount != null  and orderAccount != ''">and doa.orderAccount = #{orderAccount}</if>
-            <if test="orderStatus != null  and orderStatus != ''">and doa.orderStatus = #{orderStatus}</if>
-            <if test="dealDescribe != null  and dealDescribe != ''">and doa.dealDescribe = #{dealDescribe}</if>
+            <if test="orderStatus != null  and orderStatus != ''">and do.orderStatus = #{orderStatus}</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">and do.dealDescribe like concat( #{dealDescribe}, '%')</if>
             <if test="orderAmount != null ">and doa.orderAmount = #{orderAmount}</if>
             <if test="orderIp != null  and orderIp != ''">and doa.orderIp = #{orderIp}</if>
             <if test="appOrderId != null  and appOrderId != ''">and doa.appOrderId = #{appOrderId}</if>

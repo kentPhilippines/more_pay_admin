@@ -128,7 +128,12 @@ public class AlipayDealOrderAppController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(AlipayDealOrderApp alipayDealOrderApp) {
-        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppListDealOrder(alipayDealOrderApp);
+        list.forEach(alipayDealOrderApp1 -> {
+            if(Objects.isNull(alipayDealOrderApp1.getOrderQr())){
+                alipayDealOrderApp1.setOrderQr("未提交卡密");
+            }
+        });
         ExcelUtil<AlipayDealOrderApp> util = new ExcelUtil<AlipayDealOrderApp>(AlipayDealOrderApp.class);
         return util.exportExcel(list, "orderApp");
     }

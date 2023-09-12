@@ -31,6 +31,10 @@
                             <span>核销账号：</span>
                             <input type="text" id="channelId" name="channelId"/>
                         </li>
+                        <li>
+                            <span>交易备注：</span>
+                            <input type="text" id="dealDescribe" name="dealDescribe"/>
+                        </li>
                         <li class="select-selectpicker">
                             <label>状态： </label>
                             <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
@@ -246,6 +250,11 @@
                             table += '<li>' + '操作人：--</li>'
                         } else {
                             table += '<li>' + '操作人：' + row.submitUser + '</li>'
+                        }
+                         if ('YES' == row.isNotify) {
+                           table += '<li>' + '消息通知：已发送</li>'
+                        } else {
+                             table += '<li>' + '消息通知：未发送</li>'
                         }
                         table += '</ul>'
                         return table;

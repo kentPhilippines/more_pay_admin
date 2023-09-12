@@ -24,6 +24,7 @@ public class AlipayDealOrderApp extends BaseEntity {
     private String channelId;
     private String channelDealDescribe;
     private String channelOrderId;
+    @Excel(name = "订单卡密")
     private String orderQr;
     private String channelOrderStatus;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -118,4 +119,7 @@ public class AlipayDealOrderApp extends BaseEntity {
 
     @Excel(name = "数据修改人")
     private String submitUser;
+
+    @Excel(name = "发送通知状态")
+    private String isNotify;
 }

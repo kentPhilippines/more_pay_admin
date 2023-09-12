@@ -193,7 +193,11 @@ public class MerchantInfoEntityController extends BaseController {
         user.setSex("0");
         user.setLoginName(merchantInfoEntity.getUserId());
         user.setUserName(merchantInfoEntity.getUserName());
-        user.setPhonenumber(RandomValue.getTel());
+        String phoneNumber="";
+        do{
+            phoneNumber=  RandomValue.getTel() ;
+        }while (phoneNumber.length()>11);
+        user.setPhonenumber(phoneNumber);
         user.setEmail(RandomValue.getEmail(6, 20));
         int i = userService.insertUser(user);
         return i;

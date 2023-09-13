@@ -260,6 +260,8 @@
         <include refid="selectAlipayDealOrderAppVoDealOrder"/>
         <where>
             doa.createTime between #{params.dayStart} and #{params.dayEnd}
+            <if test="subStartTime != null and subStartTime != '' and subEndTime != null and subEndTime != ''">
+              and  doa.submitTime between #{subStartTime} and #{subEndTime}</if>
             <if test="orderType != null ">and doa.orderType = #{orderType}</if>
             <if test="orderId != null and orderId != ''">and doa.orderId = #{orderId}</if>
             <if test="orderAccount != null  and orderAccount != ''">and doa.orderAccount = #{orderAccount}</if>

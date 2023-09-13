@@ -122,4 +122,13 @@ public class AlipayDealOrderApp extends BaseEntity {
 
     @Excel(name = "发送通知状态")
     private String isNotify;
+
+    /**
+     * 操作开始时间
+     */
+    private String subStartTime;
+    /**
+     * 操作结束时间
+     */
+    private String subEndTime;
 }

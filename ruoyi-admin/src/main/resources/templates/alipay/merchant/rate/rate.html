@@ -89,6 +89,7 @@
             updateUrlAll: prefix + "/edits/{ids}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            onEditableSave: onEditableSave,
             modalName: "商户通道费率",
             columns: [{
                 checkbox: true
@@ -151,18 +152,17 @@
                         return statusTools(row);
                     }
                 },
-              /*  {
+            {
                     field: 'retain2',
-                    title: '限额',
-                    align: 'center',
-                    hidden: true
+                    title: '最低限额',
+                    align: 'center',editable: true
                 },
-                {
-                    field: 'retain3',
-                    title: '额外抽点',
-                    align: 'center',
-                    hidden: true
-                },*/
+                /*       {
+                       field: 'retain3',
+                       title: '额外抽点',
+                       align: 'center',
+                       hidden: true
+                   },*/
                 {
                     field: 'createTime',
                     title: '创建时间',
@@ -235,7 +235,13 @@
 
         window.open(prefix + "/paytest?userId=" + userId + "&Id=" + id);
     }
-
+    function onEditableSave (field, row, oldValue, $el) {
+        // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+        $.operate.post(prefix + "/edit", {
+            "id": row.id,
+            "retain2"  : row["retain2"]
+        });
+    }
 </script>
 </body>
 </html>

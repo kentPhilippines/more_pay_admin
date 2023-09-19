@@ -73,6 +73,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
 <script th:inline="javascript">
     const editFlag = [[${@permission.hasPermi('merchant:rate:edit')}]];
     const removeFlag = [[${@permission.hasPermi('merchant:rate:remove')}]];

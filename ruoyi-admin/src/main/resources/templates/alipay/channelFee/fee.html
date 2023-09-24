@@ -13,7 +13,8 @@
 
                         <li class="select-selectpicker">
                             <label>渠道：</label>
-                            <select id="channelId" name="channelId" class="selectpicker" data-none-selected-text="请选择">
+                            <select id="channelId" name="channelId" class="selectpicker"
+                                    data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="product : ${rateList}" th:text="${product.userName}"
                                         th:value="${product.userId}"></option>
@@ -22,7 +23,8 @@
 
                         <li class="select-selectpicker">
                             <label>产品类型：</label>
-                            <select id="productId" name="productId" class="selectpicker" data-none-selected-text="请选择">
+                            <select id="productId" name="productId" class="selectpicker"
+                                    data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="product : ${productList}" th:text="${product.productName}"
                                         th:value="${product.productId}"></option>
@@ -69,12 +71,15 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
-<th:block th:include="include :: bootstrap-table-editable-js" />
+<th:block th:include="include :: bootstrap-table-editable-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:channelFee:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:channelFee:remove')}]];
     const editFlagAdmin = [[${@permission.hasPermi('control:account:merchant:admin')}]];
     var prefix = ctx + "alipay/channelFee";
+    const system_type = [[${@dict.getType('system_type')}]];
+
+
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -101,15 +106,18 @@
                     title: '产品id'
                 },
                 {
+                    title: '实体类对应关系',
                     visible: editFlagAdmin == 'hidden' ? false : true,
                     field: 'impl',
-                    title: '实体类对应关系'
+                    formatter: function (value, row, index) {
+                        $.table.selectDictLabel(system_type, row.impl);
+                    }
                 },
                 {
                     visible: editFlagAdmin == 'hidden' ? false : true,
 
                     field: 'channelRFee',
-                    title: '渠道入款费率【精确到千位】',editable: true
+                    title: '渠道入款费率【精确到千位】', editable: true
                 },
                 {
                     visible: editFlagAdmin == 'hidden' ? false : true,
@@ -118,7 +126,7 @@
                     title: '渠道代付手续费【单笔】'
                 }, {
                     field: 'rotation',
-                    title: '产品轮询次数',editable: true
+                    title: '产品轮询次数', editable: true
                 },
                 {
                     visible: editFlagAdmin == 'hidden' ? false : true,
@@ -142,12 +150,13 @@
         };
         $.table.init(options);
     });
-    function onEditableSave (field, row, oldValue, $el) {
+
+    function onEditableSave(field, row, oldValue, $el) {
         // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
         $.operate.post(prefix + "/edit", {
             "id": row.id,
-             "rotation"  : row["rotation"],
-             "channelRFee"  : row["channelRFee"]
+            "rotation": row["rotation"],
+            "channelRFee": row["channelRFee"]
         });
     }
 </script>

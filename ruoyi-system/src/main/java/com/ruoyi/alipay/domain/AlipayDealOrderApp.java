@@ -131,4 +131,6 @@ public class AlipayDealOrderApp extends BaseEntity {
      * 操作结束时间
      */
     private String subEndTime;
+
+     private String account;
 }

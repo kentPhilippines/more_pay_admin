@@ -119,12 +119,10 @@
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">返回：</label>
             <div class="col-sm-8" id="content">
-
             </div>
         </div>
 
         <div class="form-group">
-
             <div class="col-sm-8">
                 <button type="button" onclick="test();">测试</button>
             </div>
@@ -186,7 +184,7 @@
                 console.log(JSON.stringify(data));
                 data =  JSON.parse(data);
                 if (data.success) {
-                    window.location.href = data.result.returnUrl
+              window.location.href = data.result.returnUrl
                     console.log(data.result.returnUrl);
                 }
 

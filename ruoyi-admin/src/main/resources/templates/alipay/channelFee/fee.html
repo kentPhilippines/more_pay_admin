@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('渠道费率列表')"/>
+    <th:block th:include="include :: select2-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -115,7 +116,6 @@
                 },
                 {
                     visible: editFlagAdmin == 'hidden' ? false : true,
-
                     field: 'channelRFee',
                     title: '渠道入款费率【精确到千位】', editable: true
                 },

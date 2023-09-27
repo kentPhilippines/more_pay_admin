@@ -47,7 +47,6 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayBankListEntity> selectAlipayBankListEntityList(AlipayBankListEntity alipayBankListEntity) {
-        alipayBankListEntity.setIsDeal(2);
         return alipayBankListEntityMapper.selectAlipayBankListEntityList(alipayBankListEntity);
     }
 
@@ -116,6 +115,18 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
     @DataSource(DataSourceType.ALIPAY_SLAVE)
     public AlipayBankListEntity selectAlipayBankListEntityByAcc(String s, String merchantId) {
         return alipayBankListEntityMapper.selectAlipayBankListEntityByAcc(s,merchantId);
+    }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int updateIsDealNo(Long id) {
+        return alipayBankListEntityMapper.updateIsDealNo(id);
+    }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int updateIsDealOff(Long id) {
+        return alipayBankListEntityMapper.updateIsDealOff(id);
     }
 
 

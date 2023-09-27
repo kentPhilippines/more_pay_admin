@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.util.StrUtil;
 import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.service.IAlipayBankListEntityService;
 import com.ruoyi.common.annotation.Log;
@@ -42,6 +43,7 @@ public class AlipayBankListEntityController extends BaseController {
     @ResponseBody
     public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
         startPage();
+        alipayBankListEntity.setAccount("PAYURL");
         List<AlipayBankListEntity> list = alipayBankListEntityService.selectAlipayBankListEntityList(alipayBankListEntity);
         return getDataTable(list);
     }
@@ -77,10 +79,25 @@ public class AlipayBankListEntityController extends BaseController {
     /**
      * 新增保存银行卡列表
      */
-    @Log(title = "银行卡列表", businessType = BusinessType.INSERT)
+    @Log(title = "新增银行卡", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(AlipayBankListEntity alipayBankListEntity) {
+        if (StrUtil.isEmpty(alipayBankListEntity.getAccountHolder())) {
+            alipayBankListEntity.setAccountHolder("PAYURL");
+        }
+        if (StrUtil.isEmpty(alipayBankListEntity.getOpenAccountBank())) {
+            alipayBankListEntity.setOpenAccountBank("测试");
+        }
+        if (StrUtil.isEmpty(alipayBankListEntity.getBankType())) {
+            alipayBankListEntity.setBankType("1");
+        }
+        if (StrUtil.isEmpty(alipayBankListEntity.getBankcode())) {
+            alipayBankListEntity.setBankcode("ICC");
+        }
+        if (StrUtil.isEmpty(alipayBankListEntity.getAccount())) {
+            alipayBankListEntity.setAccount("PAYURL");
+        }
         return toAjax(alipayBankListEntityService.insertAlipayBankListEntity(alipayBankListEntity));
     }
 
@@ -109,6 +126,25 @@ public class AlipayBankListEntityController extends BaseController {
     }
 
     /**
+     * 修改保存银行卡列表
+     */
+    @Log(title = "开启连接", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateIsDealNo")
+    @ResponseBody
+    public AjaxResult updateIsDealNo(AlipayBankListEntity alipayBankListEntity) {
+        return toAjax(alipayBankListEntityService.updateIsDealNo(alipayBankListEntity.getId()));
+    }
+    /**
+     * 修改保存银行卡列表
+     */
+    @Log(title = "关闭连接", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateIsDealOff")
+    @ResponseBody
+    public AjaxResult updateIsDealOff(AlipayBankListEntity alipayBankListEntity) {
+        return toAjax(alipayBankListEntityService.updateIsDealOff(alipayBankListEntity.getId()));
+    }
+
+    /**
      * 删除银行卡列表
      */
     @Log(title = "银行卡列表", businessType = BusinessType.DELETE)
@@ -127,4 +163,7 @@ public class AlipayBankListEntityController extends BaseController {
     public AjaxResult changeStatus(AlipayBankListEntity alipayBankListEntity) {
         return toAjax(alipayBankListEntityService.updateBankCardStatusById(alipayBankListEntity));
     }
+
+
+
 }

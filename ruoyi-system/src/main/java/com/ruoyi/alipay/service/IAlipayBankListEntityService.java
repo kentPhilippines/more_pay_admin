@@ -80,4 +80,8 @@ public interface IAlipayBankListEntityService
      */
     AlipayBankListEntity selectAlipayBankListEntityByAcc(String s, String merchantId);
 
+
+    int updateIsDealNo(Long id);
+
+    int updateIsDealOff(Long id);
 }

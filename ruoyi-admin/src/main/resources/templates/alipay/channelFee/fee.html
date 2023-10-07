@@ -137,6 +137,14 @@
                     title: '创建时间'
                 },
                 {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '交易状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 'status');
+                    }
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
@@ -149,6 +157,37 @@
         };
         $.table.init(options);
     });
+  function statusTools(row, param) {
+   if (row.status == 2) {
+                let msg = "确认要【开启】此渠道的【交易状态】吗？";
+                let val = 1;
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.id + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            } else {
+                let msg = "确认要【关闭】此渠道的【交易状态】吗？";
+                let val = 2;
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.id + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            }
+  }
+
+ /* 此渠道的管理-停用 */
+    function disable(id, msg, val) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix + "/changeStatus", {
+                "id": id,
+                "status": val
+            });
+        })
+    }
+
+ /* 此渠道的管理-启用 */
+    function enable(id, msg, val) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix + "/changeStatus", {
+               "id": id,
+                "status": val
+            });
+        })
+    }
 
     function onEditableSave(field, row, oldValue, $el) {
         // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);

@@ -399,5 +399,4 @@ public class AlipayUserFundEntityController extends BaseController {
         mapParam.put("orderId", GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_DEDUCT));
         return   HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
        }
-
 }

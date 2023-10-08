@@ -32,6 +32,11 @@ public class AlipayRunOrderEntityServiceImpl implements IAlipayRunOrderEntitySer
     public List<AlipayRunOrderEntity> selectAlipayRunOrderEntityList(AlipayRunOrderEntity alipayRunOrderEntity) {
         return alipayRunOrderEntityMapper.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
     }
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayRunOrderEntity selectAlipayRunOrderSum(AlipayRunOrderEntity alipayRunOrderEntity) {
+        return alipayRunOrderEntityMapper.selectAlipayRunOrderSum(alipayRunOrderEntity);
+    }
 
     @Override
     public List<AlipayRunOrderEntity> findAssociatedId(String orderId, String strTime, String endTime) {

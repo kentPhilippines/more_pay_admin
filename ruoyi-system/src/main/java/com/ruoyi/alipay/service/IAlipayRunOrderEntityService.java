@@ -19,6 +19,8 @@ public interface IAlipayRunOrderEntityService {
      */
     List<AlipayRunOrderEntity> selectAlipayRunOrderEntityList(AlipayRunOrderEntity alipayRunOrderEntity);
 
+    AlipayRunOrderEntity selectAlipayRunOrderSum(AlipayRunOrderEntity alipayRunOrderEntity);
+
     /**
      * 根据关联订单和时间查询数据
      *

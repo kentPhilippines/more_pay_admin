@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.collection.CollUtil;
 import com.ruoyi.alipay.domain.AlipayRunOrderEntity;
 import com.ruoyi.alipay.service.IAlipayRunOrderEntityService;
 import com.ruoyi.common.annotation.Log;
@@ -46,6 +47,20 @@ public class AlipayRunOrderEntityController extends BaseController {
 	public TableDataInfo list(AlipayRunOrderEntity alipayRunOrderEntity) {
 		startPage();
 		List<AlipayRunOrderEntity> list = alipayRunOrderEntityService.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
+		if(CollUtil.isNotEmpty(list)) {
+			AlipayRunOrderEntity	runOrderEntity =alipayRunOrderEntityService.selectAlipayRunOrderSum(alipayRunOrderEntity);
+			//合计对象
+			runOrderEntity.setOrderId("总计");
+			runOrderEntity.setAssociatedId("--");
+			runOrderEntity.setOrderAccount("--");
+			runOrderEntity.setRunOrderType(-1);
+		//	runOrderEntity.setAmount(10000d);
+			runOrderEntity.setRunType("--");
+			runOrderEntity.setAmountType("--");
+		//	runOrderEntity.setAmountNow(99999d);
+			runOrderEntity.setDealDescribe("--");
+			list.add(runOrderEntity);
+		}
 		return getDataTable(list);
 	}
 

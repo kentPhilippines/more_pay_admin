@@ -118,7 +118,7 @@
 
     function statusTools(row, param) {
         if (param === 'isDeal') {
-            if (row.idDeal == 1) {
+            if (row.isDeal == 1) {
                 let msg = "确认此连接【开启】吗？";
                 let val = 2;
                 return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.id + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';

@@ -30,6 +30,8 @@ public interface AlipayRunOrderEntityMapper
      */
     public List<AlipayRunOrderEntity> selectAlipayRunOrderEntityList(AlipayRunOrderEntity alipayRunOrderEntity);
 
+     AlipayRunOrderEntity selectAlipayRunOrderSum(AlipayRunOrderEntity alipayRunOrderEntity);
+
     /**
      * 新增流水订单记录
      * 

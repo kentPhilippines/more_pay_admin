@@ -4,10 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.ruoyi.alipay.domain.AlipayChanelFee;
-import com.ruoyi.alipay.domain.AlipayProductEntity;
-import com.ruoyi.alipay.domain.AlipayUserFundEntity;
-import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.domain.util.McFee;
 import com.ruoyi.alipay.service.IAlipayChanelFeeService;
 import com.ruoyi.alipay.service.IAlipayProductService;
@@ -206,4 +203,12 @@ public class AlipayChanelFeeController extends BaseController {
 	public AjaxResult remove(String ids) {
 		return toAjax(alipayChanelFeeService.deleteAlipayChanelFeeByIds(ids));
 	}
+
+	@Log(title = "状态调整", businessType = BusinessType.UPDATE)
+	@PostMapping("/changeStatus")
+	@ResponseBody
+	public AjaxResult changeStatus(AlipayChanelFee chanelFee) {
+		return toAjax(alipayChanelFeeService.updateAlipayChanelFee(chanelFee));
+	}
+
 }

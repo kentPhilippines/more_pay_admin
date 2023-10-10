@@ -68,6 +68,7 @@ public class AlipayDealOrderAppController extends BaseController {
         //查询产品类型下拉菜单
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("2");
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         mmap.put("productList", list);
         return prefix + "/orderApp";

@@ -265,7 +265,7 @@
             <if test="orderType != null ">and doa.orderType = #{orderType}</if>
             <if test="orderId != null and orderId != ''">and doa.orderId = #{orderId}</if>
             <if test="orderAccount != null  and orderAccount != ''">and doa.orderAccount = #{orderAccount}</if>
-            <if test="orderStatus != null  and orderStatus != ''">and do.orderStatus = #{orderStatus}</if>
+            <if test="orderStatus != null  and orderStatus != ''">and doa.orderStatus = #{orderStatus}</if>
             <if test="dealDescribe != null  and dealDescribe != ''">and do.dealDescribe like concat( #{dealDescribe}, '%')</if>
             <if test="orderAmount != null ">and doa.orderAmount = #{orderAmount}</if>
             <if test="orderIp != null  and orderIp != ''">and doa.orderIp = #{orderIp}</if>

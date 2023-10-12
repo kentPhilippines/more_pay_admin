@@ -81,7 +81,7 @@
                do.orderQr as orderQr,
                do.createTime as channelTime ,
                do.submitTime as channelSubmitTime ,
-               do.isNotify as isNotify ,
+               doa.isNotify as isNotify ,
                do.orderId as channelOrderId
         from alipay_deal_order_app  doa      LEFT JOIN alipay_deal_order do ON   doa.orderId = do.associatedId
     </sql>

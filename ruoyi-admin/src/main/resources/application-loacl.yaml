@@ -1,0 +1,35 @@
+nacos:
+  config:
+    server-addr: 94.74.120.122:8848
+    #server-addr: 172.16.32.220:8848 #内网
+    #namespace: 4ea7a38e-32fd-4ddd-b384-dc5ad4bd753d #test
+    namespace:  test
+    data-id: admin-qs.yaml
+    #group: PG_GROUP
+    group: ZB_GROUP
+    bootstrap:
+      enable: true
+      log-enable: true
+    type: yaml
+
+
+
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  application:
+    name: admin
+  #  profiles:
+  #    active: dev
+
+  #logging:
+  #  level:
+  #    root: info
+
+  messages:
+    # 国际化资源文件路径
+    basename: static/i18n/messages
+
+
+

@@ -83,6 +83,8 @@
                 {field: 'userName', title: '账户名称 '},
                 {field: 'accountBalance', title: '可取现金额 '},
                 {field: 'limitBalance', title: '余额上限 ',editable: true},
+                {field: 'minAmount', title: '单笔最小核销金额',editable: true},
+                {field: 'maxAmount', title: '单笔最大核销金额 ',editable: true},
                 {field: 'timesTotal', title: '核销账户数【卡密渠道专用字段】 '},
 /*
                 {field: 'rate', title: '商户交易费率'},
@@ -200,7 +202,9 @@
        // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
         $.operate.post(prefix + "/edit", {
             "id": row.id,
-            "limitBalance" : row["limitBalance"]
+            "limitBalance" : row["limitBalance"],
+            "minAmount" : row["minAmount"],
+            "maxAmount" : row["maxAmount"]
         });
     }
     /* 此渠道的管理-启用 */

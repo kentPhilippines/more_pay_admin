@@ -3,10 +3,9 @@ nacos:
     server-addr: 94.74.120.122:8848
     #server-addr: 172.16.32.220:8848 #内网
     #namespace: 4ea7a38e-32fd-4ddd-b384-dc5ad4bd753d #test
-    namespace:  test
-    data-id: admin-qs.yaml
-    #group: PG_GROUP
-    group: ZB_GROUP
+    namespace:  pro
+    data-id: admin.yaml
+    group: PG_GROUP
     bootstrap:
       enable: true
       log-enable: true
@@ -30,6 +29,3 @@ spring:
   messages:
     # 国际化资源文件路径
     basename: static/i18n/messages
-
-
-

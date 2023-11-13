@@ -50,7 +50,7 @@ public class DemoContorller extends BaseController {
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         modelMap.put("productList", list);
         //查询所有的商户
-        alipayUserInfo.setSwitchs(1);
+      //  alipayUserInfo.setSwitchs(1);
         alipayUserInfo.setUserType(1);
         List<AlipayUserInfo> userInfo = alipayUserInfoService.selectAllUserInfoList(alipayUserInfo);
         modelMap.put("merList", userInfo);

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -110,6 +111,9 @@ public interface AlipayUserInfoMapper {
     @Select("select * from alipay_user_info where userId = #{userId} ")
     AlipayUserInfo selectMerhantInfoByUserId(@Param("userId") String userId);
 
+    @Select(" select ifnull(sum(dealAmount),0) from alipay_deal_order where orderStatus = 2 and orderQrUser = #{orderQrUser} and" +
+            " createTime between #{dayStart} and #{dayEnd} ")
+    BigDecimal findOrderByAppSucSum(@Param("orderQrUser") String orderQrUser, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 
     @Select("<script>" +
             "select id, userId, userName, switchs, qrRechargeList,queueList,submitTime, dealUrl from alipay_user_info where agent is null and status = 1 " +

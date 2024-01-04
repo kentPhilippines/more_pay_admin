@@ -16,6 +16,7 @@ import jdk.nashorn.internal.runtime.options.Options;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -107,9 +108,10 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
             channel.setMaxAmount(userInfo.getMaxAmount());
             channel.setMinAmount(userInfo.getMinAmount());
             channel.setTimesTotal(userInfo.getTimesTotal());
-            channel.setLimitBalance(userInfo.getLimitBalance());
             AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityMapper.findDealRate(userInfo.getUserId());
             Double fee = Objects.isNull(alipayUserRateEntity) ? 0.00 : alipayUserRateEntity.getFee();
+            BigDecimal sucSumCoin = alipayUserInfoMapper.findOrderByAppSucSum(channel.getUserId(), DateUtils.dayStart(), DateUtils.dayEnd());
+            channel.setLimitBalance(sucSumCoin.intValue());
             channel.setRate(fee);
         }
         return channelAccount;

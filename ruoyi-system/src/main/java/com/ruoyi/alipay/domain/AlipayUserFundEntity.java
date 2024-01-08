@@ -177,4 +177,7 @@ public class AlipayUserFundEntity extends BaseEntity {
 
     @Excel(name = "商户费率")
     private Double rate;
+
+    @Excel(name = "核销平台名称")
+    private String platName;
 }

@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.alipay;
 
 import cn.hutool.core.thread.ThreadUtil;
+import com.ruoyi.alipay.domain.AlipayPlat;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,17 +37,25 @@ import java.util.List;
 @RequestMapping("/alipay/channel")
 public class AipayChannelContorller extends BaseController {
     private String prefix = "alipay/channel";
-    @Autowired private IAlipayUserInfoService alipayUserInfoService;
+    @Autowired
+    private IAlipayUserInfoService alipayUserInfoService;
+
     @GetMapping()
     public String list() {
         return prefix + "/list";
     }
 
-    @Autowired private IAlipayUserFundEntityService alipayUserFundEntityService;
-    @Autowired private DictionaryUtils dictionaryUtils;
-    @Autowired private IAlipayAmountEntityService alipayAmountEntityService;
-    @Autowired private SysPasswordService passwordService;
-    @Autowired private IAlipayUserRateEntityService alipayUserRateEntityService;
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
+    @Autowired
+    private IAlipayAmountEntityService alipayAmountEntityService;
+    @Autowired
+    private SysPasswordService passwordService;
+    @Autowired
+    private IAlipayUserRateEntityService alipayUserRateEntityService;
+
     /**
      * 查询用户资金账户列表
      */
@@ -97,8 +107,13 @@ public class AipayChannelContorller extends BaseController {
         AlipayUserInfo channelInfo = alipayUserInfoService.findMerchantInfoByUserId(userId);
         mmap.put("channelInfo", channelInfo);
         mmap.put("userId", loginName);
+        List<AlipayPlat> platList = new ArrayList<>();
+        platList.add(AlipayPlat.builder().id("kuke").name("酷克").build());
+        platList.add(AlipayPlat.builder().id("alpha").name("阿尔法").build());
+        mmap.put("platList", platList);
         return prefix + "/edit";
     }
+
 
     /**
      * 转发财务
@@ -139,11 +154,11 @@ public class AipayChannelContorller extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        AlipayUserFundEntity alipayUserFundEntity=  alipayUserFundEntityService.selectAlipayUserFundEntityById(Long.valueOf(ids));
+        AlipayUserFundEntity alipayUserFundEntity = alipayUserFundEntityService.selectAlipayUserFundEntityById(Long.valueOf(ids));
         alipayUserFundEntityService.delete(Long.valueOf(ids));
-        AlipayUserInfo alipayUserInfo= alipayUserInfoService.findMerchantInfoByUserId(alipayUserFundEntity.getUserId());
+        AlipayUserInfo alipayUserInfo = alipayUserInfoService.findMerchantInfoByUserId(alipayUserFundEntity.getUserId());
         alipayUserInfoService.deleteAlipayUserInfoByIds(String.valueOf(alipayUserInfo.getId()));
         alipayUserRateEntityService.delectUser(alipayUserInfo.getUserId());
-        return toAjax( 1);
+        return toAjax(1);
     }
 }

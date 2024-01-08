@@ -208,4 +208,7 @@ public class AlipayUserInfo extends BaseEntity {
 
     @Excel(name = "货币类型")
     private String currency;
+
+    @Excel(name = "核销平台名称")
+    private String platName;
 }

@@ -182,6 +182,7 @@
             <if test="maxAmount != null ">maxAmount = #{maxAmount},</if>
             <if test="timesTotal != null ">timesTotal = #{timesTotal},</if>
             <if test="limitBalance != null ">limitBalance = #{limitBalance},</if>
+            <if test="platName != null ">platName = #{platName},</if>
             <if test="startTime != null  and startTime != ''">startTime = #{startTime},</if>
             <if test="endTime != null  and endTime != ''">endTime = #{endTime},</if>
             <if test="witip != null  and witip != ''">witip = #{witip},</if>

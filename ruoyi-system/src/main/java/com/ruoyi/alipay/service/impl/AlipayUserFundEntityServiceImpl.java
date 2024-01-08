@@ -12,7 +12,10 @@ import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.http.HttpUtils;
 import jdk.nashorn.internal.runtime.options.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,6 +38,7 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
     @Resource
     private AlipayUserRateEntityMapper alipayUserRateEntityMapper;
 
+    private static final Logger log = LoggerFactory.getLogger(AlipayUserFundEntityServiceImpl.class);
     /**
      * 查询用户资金账户
      *
@@ -111,8 +115,11 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
             AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityMapper.findDealRate(userInfo.getUserId());
             Double fee = Objects.isNull(alipayUserRateEntity) ? 0.00 : alipayUserRateEntity.getFee();
             BigDecimal sucSumCoin = alipayUserInfoMapper.findOrderByAppSucSum(channel.getUserId(), DateUtils.dayStart(), DateUtils.dayEnd());
-            channel.setLimitBalance(sucSumCoin.intValue());
+            log.info("渠道商户：{},查询可取现金额{}",channel.getUserId(),sucSumCoin.intValue());
+            channel.setAccountBalance(sucSumCoin.doubleValue());
+            channel.setLimitBalance(userInfo.getLimitBalance());
             channel.setRate(fee);
+            channel.setPlatName(userInfo.getPlatName());
         }
         return channelAccount;
     }

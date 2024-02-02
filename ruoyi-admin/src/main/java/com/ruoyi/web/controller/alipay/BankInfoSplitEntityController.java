@@ -84,7 +84,7 @@ public class BankInfoSplitEntityController extends BaseController {
         BankInfoSplitResult bankInfoSplitResult = BankInfoAnalysisAlgorithmTool.runAlgorithm(a);
         AlipayMediumEntity alipayMediumEntity = new AlipayMediumEntity();
         alipayMediumEntity.setAccount(bankInfoSplitResult.getBankName());
-        alipayMediumEntity.setMountNow(bankInfoSplitResult.getBalance());
+      //  alipayMediumEntity.setMountNow(bankInfoSplitResult.getBalance());
         alipayMediumEntity.setMediumPhone(bankInfoSplitResult.getPhoneNumber());
         alipayMediumEntity.setNotfiyMask(bankInfoSplitResult.getMyselfTailNumber());
         int num = alipayMediumEntityService.updateAlipayMediumEntityByCondition(alipayMediumEntity);

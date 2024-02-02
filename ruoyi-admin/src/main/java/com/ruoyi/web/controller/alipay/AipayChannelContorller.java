@@ -110,6 +110,7 @@ public class AipayChannelContorller extends BaseController {
         List<AlipayPlat> platList = new ArrayList<>();
         platList.add(AlipayPlat.builder().id("kuke").name("酷克").build());
         platList.add(AlipayPlat.builder().id("alpha").name("阿尔法").build());
+        platList.add(AlipayPlat.builder().id("tsl").name("特斯拉").build());
         mmap.put("platList", platList);
         return prefix + "/edit";
     }

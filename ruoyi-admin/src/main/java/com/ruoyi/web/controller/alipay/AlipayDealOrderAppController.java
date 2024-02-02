@@ -233,7 +233,7 @@ public class AlipayDealOrderAppController extends BaseController {
         Map map = new HashMap();
         map.put("orderNo", orderNo);
         map.put("password", password);
-        map.put("account", alipayDealOrderApp.getAccount());
+        map.put("account", alipayDealOrderEntity.getAccount());
         map.put("channel", channel);
         map.put("manage", "manage");
         ThreadUtil.execute(() -> {
